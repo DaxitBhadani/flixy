@@ -101,7 +101,6 @@
                                     <button type="button" data-bs-toggle="modal" data-bs-target="#addSubtitleModal"
                                         class="btn theme-bg text-light px-4">
                                         Add Movie Subtitle
-
                                     </button>
                                 </div>
                                 <div class="card-body px-0">

@@ -20,7 +20,7 @@ $(document).ready(function () {
         $("#editSource_type").change(function () {
             if ($(".otherSelect").is(":selected")) {
                 $(".sourceFile").show();
-                $(".sourceURL").hide();
+                $(".sourceURL").hide(); 
             } else {
                 $(".sourceURL").show();
                 $(".sourceFile").hide();

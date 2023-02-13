@@ -4,6 +4,7 @@ use App\Http\Controllers\ActorController;
 use App\Http\Controllers\CastController;
 use App\Http\Controllers\ContentController;
 use App\Http\Controllers\EpisodeController;
+use App\Http\Controllers\EpisodeSubtitleController;
 use App\Http\Controllers\GenreController;
 use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\MainController;
@@ -99,4 +100,13 @@ Route::post('fetchEpisodeList', [EpisodeController::class, 'fetchEpisodeList']);
 Route::post('updateEpisode/{id}', [EpisodeController::class, 'updateEpisode']);
 Route::post('deleteEpisode/{id}', [EpisodeController::class, 'deleteEpisode']);
 
-Route::get('contentList/series/source/{id}', [EpisodeController::class, 'episodeSource']);
+Route::get('contentList/series/source/{id}', [EpisodeController::class, 'episodeList']);
+
+Route::post('addEpisodeSource', [EpisodeController::class, 'addEpisodeSource']);
+Route::post('fetchEpisodeSourceList/{id}', [EpisodeController::class, 'fetchEpisodeSourceList']);
+Route::post('updateEpisodeSource/{id}', [EpisodeController::class, 'updateEpisodeSource']);
+Route::post('deleteEpisodeSource/{id}', [EpisodeController::class, 'deleteEpisodeSource']);
+
+Route::post('addEpisodeSubtitle', [EpisodeController::class, 'addEpisodeSubtitle']);
+Route::post('fetchEpisodeSubtitle/{id}', [EpisodeController::class, 'fetchEpisodeSubtitle']);
+Route::post('deleteEpisodeSubtitle/{id}', [EpisodeController::class, 'deleteEpisodeSubtitle']);

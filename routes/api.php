@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\EpisodeController;
 use App\Http\Controllers\FavouriteMusicController;
 use App\Http\Controllers\MusicController;
 use App\Http\Controllers\SourceController;
@@ -26,3 +27,6 @@ Route::post('test', [TvChannelController::class,'test']);
 Route::post('viewCount', [SourceController::class, 'viewCount']);
 Route::post('shareCount', [SourceController::class, 'shareCount']);
 Route::post('downloadCount', [SourceController::class, 'downloadCount']);
+
+Route::post('episodeViewCount', [EpisodeController::class, 'episodeViewCount']);
+Route::post('episodeDownloadCount', [EpisodeController::class, 'episodeDownloadCount']);

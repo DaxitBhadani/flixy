@@ -13,16 +13,16 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('episodes', function (Blueprint $table) {
+        Schema::create('episode_source', function (Blueprint $table) {
             $table->id();
-            $table->integer('season_id');
+            $table->integer('episode_id');
             $table->string('title');
-            $table->string('duration');
-            $table->string('access_type');
-            $table->string('desc');
-            $table->string('image');
-            $table->integer('view_count')->default('0');
-            $table->integer('download_count')->default('0');
+            $table->string('quality');
+            $table->string('size');
+            $table->integer('download_type');
+            $table->integer('source_type');
+            $table->integer('access_type');
+            $table->string('source_url');
             $table->timestamps();
         });
     }
@@ -34,6 +34,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('episodes');
+        Schema::dropIfExists('episode_source');
     }
 };

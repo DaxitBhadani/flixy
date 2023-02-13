@@ -81,7 +81,7 @@ class SourceController extends Controller
         echo json_encode($json_data);
         exit();
     }
-    
+
     public function contentListEdit($id)
     {
         $content = Content::find($id)->all()->first();
@@ -511,7 +511,7 @@ class SourceController extends Controller
         $viewcount->save();
         return response()->json([
             'status' => true,
-            'message' => 'Movie Count',
+            'message' => 'View Count',
             'data' =>  $viewcount,
         ]);
     }
@@ -539,7 +539,7 @@ class SourceController extends Controller
         $downloadcount->save();
         return response()->json([
             'status' => true,
-            'message' => 'download Count',
+            'message' => 'Download Count',
             'data' =>  $downloadcount,
         ]);
     }

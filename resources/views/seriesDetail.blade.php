@@ -4,26 +4,10 @@
 
     <div class="page-content">
         <section class="detail_list">
-            <div class="card">
-                <div class="card-header card-header-border">
+                <div class="card-header card-header-border mt-3 mb-4">
                     <h4 class="fw-normal m-0"> <span class="theme-bg px-3 py-2">{{ $data->title }} </span> -- Edit Series
                         Content </h4>
-                    <div class="">
-                        <p class="btn border text-light px-4 m-0">
-                            <i data-feather="eye"></i>
-                            <span class="ms-2"> {{ $data->view_count }} Views </span>
-                        </p>
-                        <p class="btn border text-light px-4 mb-0 ms-1">
-                            <i data-feather="share-2"></i>
-                            <span class="ms-2"> {{ $data->share_count }} Shares </span>
-                        </p>
-                        <p class="btn border text-light px-4 mb-0 ms-1">
-                            <i data-feather="download"></i>
-                            <span class="ms-2"> {{ $data->download_count }} Downloads </span>
-                        </p>
-                    </div>
                 </div>
-            </div>
             <div class="card">
 
                 <div class="card-body">

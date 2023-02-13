@@ -15,8 +15,9 @@ return new class extends Migration
     {
         Schema::create('sources', function (Blueprint $table) {
             $table->id();
+            $table->integer('movie_id');
             $table->string('title');
-            $table->integer('quality');
+            $table->string('quality');
             $table->string('size');
             $table->integer('download_type');
             $table->integer('source_type');
