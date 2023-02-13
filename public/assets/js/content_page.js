@@ -293,7 +293,7 @@ $(document).ready(function () {
         });
     });
 
-    $("#contentSeriesTable").on("click", ".ssedit", function (e) {
+    $("#contentSeriesTable").on("click", ".edit", function (e) {
         e.preventDefault();
 
         var id = $(this).attr("rel");
@@ -318,7 +318,7 @@ $(document).ready(function () {
         $("#editSelectLang").val(language).selectric('refresh');
         $("#editRating").val(rating);
         $("#editTrailerId").val(trailerId);
-        $("#editGenres").val(genres || genres.split(',')).selectric('refresh');
+        $("#editGenres").val(genres.split(',') || genres).selectric('refresh');
         $('#editVerticlePosterImg').attr('src', `upload/${vimage}`);
         $('#editHorizontalPosterImg').attr('src', `upload/${himage}`);
 

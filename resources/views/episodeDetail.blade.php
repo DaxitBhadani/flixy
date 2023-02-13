@@ -2,7 +2,7 @@
 @section('content')
 
     <input type="hidden" name="series_id" class="series_id" id="series_id" value="{{ $data->id }}">
-    <input type="hidden" name="episode_id" class="episode_id" id="episode_id" value="{{ $episodes->series_id }}">
+    <input type="hidden" name="episode_id" class="episode_id" id="episode_id" value="{{ $data->season_id }}">
 
     <section class="detail_list">
         <div class="card">

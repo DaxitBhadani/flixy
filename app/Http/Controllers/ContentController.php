@@ -52,33 +52,39 @@ class ContentController extends Controller
         $start = $request->input('start');
         $order = $columns[$request->input('order.0.column')];
         $dir = $request->input('order.0.dir');
+        $content_type = 1;
 
         $totalFiltered = $totalData;
         if (empty($request->input('search.value'))) {
             $result = Content::offset($start)
-                ->where('content_type', 1)
+                ->where('content_type', $content_type)
                 ->limit($limit)
                 ->orderBy($order, $dir)
                 ->get();
         } else {
             $search = $request->input('search.value');
-            $result =  Content::Where('title', 'LIKE', "%{$search}%")
-                ->offset($start)
-                ->limit($limit)
-                ->orderBy($order, $dir)
-                ->get();
-            $totalFiltered = Content::Where('title', 'LIKE', "%{$search}%")
-                ->count();
-        }
+            $result =  Content::whereHas('language', function ($query) use ($search){
+                $query->where('title', 'like', '%'.$search.'%')
+                ->orwhere('languageName',  'LIKE', "%{$search}%")
+                ->orwhere('year',  'LIKE', "%{$search}%");
+            })
+            ->where('content_type', $content_type)
+            ->offset($start)->limit($limit)->orderBy($order, $dir)->get();
 
-       
+            $totalFiltered = Content::whereHas('language', function ($query) use ($search){
+                $query->where('title', 'like', '%'.$search.'%')
+                ->orwhere('languageName',  'LIKE', "%{$search}%")
+                ->orwhere('year',  'LIKE', "%{$search}%");
+            })
+            ->where('content_type', $content_type)
+            ->count();
+        }
 
         $data = array();
         foreach ($result as $item) {
-
             
-            $verticlePoster = '<img src="./upload/' . $item->verticle_poster . '" alt="vertical image" width="60px" height="80px">';
-            $image = '<img src="./upload/' . $item->horizontal_poster . '" alt="horizontal image" width="100px" height="70px">';
+            $verticlePoster = '<img src="./upload/' . $item->verticle_poster . '" alt="vertical image" width="60px" height="80px" class="object-cover">';
+            $image = '<img src="./upload/' . $item->horizontal_poster . '" alt="horizontal image" width="100px" height="70px" class="object-cover">';
 
             $edit = '<a data-title="' . $item->title . '"  data-vimage="' . $item->verticle_poster . '" data-himage="' . $item->horizontal_poster . '" data-rating="' . $item->rating . '" data-year="' . $item->year . '"  data-language="' . $item->language . '"  data-desc="' . $item->desc . '" data-duration="' . $item->duration . '" data-year="' . $item->year . '" data-rating="' . $item->rating . '" data-genres="' . $item->genres . '" data-trailer_id="' . $item->trailer_id . '"  data-content_type="' . $item->content_type . '" class="me-2 btn btn-primary px-3 text-white edit" rel=' . $item->id . ' >' . __('<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>') . '</a>';
 
@@ -284,7 +290,7 @@ class ContentController extends Controller
     public function fetchContentSeries(Request $request)
     {
 
-        $totalData =  Content::where('content_type', 2)->count();
+        $totalData =  Content::where('content_type', 1)->count();
         $rows = Content::orderBy('id', 'DESC')->get();
 
         $result = $rows;
@@ -304,23 +310,30 @@ class ContentController extends Controller
         $start = $request->input('start');
         $order = $columns[$request->input('order.0.column')];
         $dir = $request->input('order.0.dir');
+        $content_type = 2;
 
         $totalFiltered = $totalData;
         if (empty($request->input('search.value'))) {
             $result = Content::offset($start)
-                ->where('content_type', 2)
+                ->where('content_type', $content_type)
                 ->limit($limit)
                 ->orderBy($order, $dir)
                 ->get();
         } else {
             $search = $request->input('search.value');
-            $result =  Content::Where('title', 'LIKE', "%{$search}%")
-                ->offset($start)
-                ->limit($limit)
-                ->orderBy($order, $dir)
-                ->get();
-            $totalFiltered = Content::Where('title', 'LIKE', "%{$search}%")
-                ->count();
+            $result =  Content::whereHas('language', function ($query) use ($search){
+                $query->where('title', 'like', '%'.$search.'%')
+                ->orwhere('languageName',  'LIKE', "%{$search}%");
+            })
+            ->where('content_type', $content_type)
+            ->offset($start)->limit($limit)->orderBy($order, $dir)->get();
+
+            $totalFiltered = Content::whereHas('language', function ($query) use ($search){
+                $query->where('title', 'like', '%'.$search.'%')
+                ->orwhere('languageName',  'LIKE', "%{$search}%");
+            })
+            ->where('content_type', $content_type)
+            ->count();
         }
 
 
@@ -329,8 +342,8 @@ class ContentController extends Controller
         $data = array();
         foreach ($result as $item) {
 
-            $verticlePoster = '<img src="./upload/' . $item->verticle_poster . '" alt="vertical image" width="60px" height="80px">';
-            $image = '<img src="./upload/' . $item->horizontal_poster . '" alt="horizontal image" width="100px" height="70px">';
+            $verticlePoster = '<img src="./upload/' . $item->verticle_poster . '" alt="vertical image" width="60px" height="80px" class="object-cover">';
+            $image = '<img src="./upload/' . $item->horizontal_poster . '" alt="horizontal image" width="100px" height="70px" class="object-cover">';
 
             $edit = '<a data-title="' . $item->title . '"  data-vimage="' . $item->verticle_poster . '" data-himage="' . $item->horizontal_poster . '" data-rating="' . $item->rating . '" data-year="' . $item->year . '"  data-language="' . $item->language . '"  data-desc="' . $item->desc . '" data-duration="' . $item->duration . '" data-year="' . $item->year . '" data-rating="' . $item->rating . '" data-genres="' . $item->genres . '" data-trailer_id="' . $item->trailer_id . '"  data-content_type="' . $item->content_type . '" class="me-2 btn btn-primary px-3 text-white edit" rel=' . $item->id . ' >' . __('<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>') . '</a>';
 

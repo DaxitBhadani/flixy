@@ -15,4 +15,5 @@ class Content extends Model
         return $this->hasOne(Language::class, 'id', 'language');
    }
 
+
 }

@@ -15,7 +15,7 @@ class EpisodeController extends Controller
 
     public function episodeList($id)
     {
-        $episode = EpisodeSource::where('series_id', $id)->get()->first();
+        $episode = EpisodeSource::where('episode_id', $id)->get()->first();
         $data = Episode::where('season_id', $id)->get()->first();
         $languages = Language::get();
         return view('episodeDetail',[
@@ -203,8 +203,8 @@ class EpisodeController extends Controller
     public function fetchEpisodeSourceList(Request $request, $id)
     {
         
-        $totalData =  EpisodeSource::where('series_id', $id)->count();
-        $rows = EpisodeSource::where('series_id', $id)->orderBy('id', 'DESC')->get();
+        $totalData =  EpisodeSource::where('episode_id', $id)->count();
+        $rows = EpisodeSource::where('episode_id', $id)->orderBy('id', 'DESC')->get();
 
         $result = $rows;
 
@@ -221,23 +221,24 @@ class EpisodeController extends Controller
 
         $totalFiltered = $totalData;
         if (empty($request->input('search.value'))) {
-            $result = EpisodeSource::where('series_id', $id)->offset($start)
+            $result = EpisodeSource::where('episode_id', $id)->offset($start)
                 ->limit($limit)
                 ->orderBy($order, $dir)
                 ->get();
         } else {
             $search = $request->input('search.value');
-            $result =  EpisodeSource::where('series_id', $id)->Where('name', 'LIKE', "%{$search}%")
+            $result =  EpisodeSource::where('episode_id', $id)->Where('name', 'LIKE', "%{$search}%")
                 ->offset($start)
                 ->limit($limit)
                 ->orderBy($order, $dir)
                 ->get();
-            $totalFiltered = EpisodeSource::where('series_id', $id)->Where('name', 'LIKE', "%{$search}%")
+            $totalFiltered = EpisodeSource::where('episode_id', $id)->Where('name', 'LIKE', "%{$search}%")
                 ->count();
         }
         
         $data = array();
         foreach ($result as $item) {
+
 
 
             if ($item->source_type == 7) {
@@ -246,12 +247,25 @@ class EpisodeController extends Controller
                 $source_url = $item->source_url;
             }
 
+           
+
+
             $edit = '<a href="javascript:;" data-title="' . $item->title . '" data-quality="' . $item->quality . '" data-size="' . $item->size . '" data-downloadtype="' . $item->download_type . '"  data-sourcetype="' . $item->source_type . '" data-sourceurl="' . $item->source_url . '" data-accesstype="' . $item->access_type . '" class="me-3 btn btn-primary px-4 text-white edit" rel=' . $item->id . ' >' . __("Edit") . '</a>';
 
             $delete = '<a href="javascript:;" class="mr-2 btn btn-danger px-4 text-white delete" rel=' . $item->id . ' >' . __("Delete") . '</a>';
 
             $action =  '<div class="action" style="text-align: right;"> ' .  $edit . $delete . ' </div>';
 
+            switch ($item->source_type) {
+                case 1: $item->source_type = "Youtube Id"; break;
+                case 2: $item->source_type = "M3u8 Url"; break;
+                case 3: $item->source_type = "Mov Url"; break;
+                case 4: $item->source_type = "Mp4 Url"; break;
+                case 5: $item->source_type = "Mkv Url"; break;
+                case 6: $item->source_type = "Webm Url"; break;
+                default: $item->source_type = "File "; break;
+            }
+            
             $data[] = array(
                 $item->source_type,
                 $item->title,

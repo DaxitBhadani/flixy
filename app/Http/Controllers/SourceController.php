@@ -52,19 +52,31 @@ class SourceController extends Controller
         }
         $data = array();
         foreach ($result as $item) {
-            
+
             if ($item->source_type == 7) {
-                $source_url = '<a href="#" id="video_id" rel="' .$item->source_url. '" data-bs-toggle="modal" data-bs-target="#viewVideoModal" class="btn btn-success green video_show_link"><i class="bi bi-play-fill fs-2"></i></a>';
+                $source_url = '<a href="#" id="video_id" rel="' . $item->source_url . '" data-bs-toggle="modal" data-bs-target="#viewVideoModal" class="btn btn-success green video_show_link"><i class="bi bi-play-fill fs-2"></i></a>';
             } else {
                 $source_url = $item->source_url;
             }
 
-            $edit = '<a href="#" data-title="'. $item->title .'" data-quality="'. $item->quality .'" data-size="'. $item->size .'" data-download="'. $item->download_type .'" data-sourcetype="'. $item->source_type .'" data-sourceurl="'. $item->source_url .'" data-accesstype="'. $item->access_type .'" class="me-3 btn btn-primary px-4 text-white edit" rel=' . $item->id . ' >' . __("Edit") . '</a>';
+         
+
+            $edit = '<a href="#" data-title="' . $item->title . '" data-quality="' . $item->quality . '" data-size="' . $item->size . '" data-download="' . $item->download_type . '" data-sourcetype="' . $item->source_type . '" data-sourceurl="' . $item->source_url . '" data-accesstype="' . $item->access_type . '" class="me-3 btn btn-primary px-4 text-white edit" rel=' . $item->id . ' >' . __("Edit") . '</a>';
 
             $delete = '<a href="" class="mr-2 btn btn-danger px-4 text-white delete" rel=' . $item->id . ' >' . __("Delete") . '</a>';
 
-            $action =  '<div class="action" style="text-align: right;"> ' . $edit . $delete .' </div>'; 
+            $action =  '<div class="action" style="text-align: right;"> ' . $edit . $delete . ' </div>';
 
+            switch ($item->source_type) {
+                case 1: $item->source_type = "Youtube Id"; break;
+                case 2: $item->source_type = "M3u8 Url"; break;
+                case 3: $item->source_type = "Mov Url"; break;
+                case 4: $item->source_type = "Mp4 Url"; break;
+                case 5: $item->source_type = "Mkv Url"; break;
+                case 6: $item->source_type = "Webm Url"; break;
+                default: $item->source_type = "File "; break;
+            }
+            
             $data[] = array(
                 $item->source_type,
                 $item->title,
@@ -104,8 +116,6 @@ class SourceController extends Controller
                 'message' => 'Content Not Found',
             ]);
         }
-
-        
     }
 
     public function storeNewSource(Request $request)
@@ -176,7 +186,7 @@ class SourceController extends Controller
 
         $source = Source::find($id);
         if ($source) {
-            
+
             $source->title = $request->title;
             $source->quality = $request->quality;
             $source->size = $request->size;
@@ -198,7 +208,7 @@ class SourceController extends Controller
                 $source->source_url = $request->source_url;
             }
 
-            
+
             $source->save();
             return response()->json([
                 'status' => 200,
@@ -213,8 +223,7 @@ class SourceController extends Controller
     }
 
     public function deleteSource($id)
-    {
-        {
+    { {
             $source = Source::find($id);
             $path = 'upload/' . $source->source_url;
             if (File::exists($path)) {
@@ -273,14 +282,14 @@ class SourceController extends Controller
         }
         $data = array();
         foreach ($result as $item) {
-            
-            $image = '<img src="../upload/'.$item->actors->image.'" width="50px" height="50px" style="object-fit: cover;">';
+
+            $image = '<img src="../upload/' . $item->actors->image . '" width="50px" height="50px" style="object-fit: cover;">';
 
             $edit = '<a data-title="' . $item->actors->id . '" data-role="' . $item->role . '" href="" class="me-3 btn btn-primary px-4 text-white edit" rel=' . $item->id . ' >' . __("Edit") . '</a>';
 
             $delete = '<a href="" class="mr-2 btn btn-danger px-4 text-white delete" rel=' . $item->id . ' >' . __("Delete") . '</a>';
 
-            $action =  '<div class="action" style="text-align: right;"> ' . $edit . $delete .' </div>'; 
+            $action =  '<div class="action" style="text-align: right;"> ' . $edit . $delete . ' </div>';
 
             $data[] = array(
                 $image,
@@ -342,7 +351,7 @@ class SourceController extends Controller
 
         $cast = Cast::find($id);
         if ($cast) {
-            
+
             $cast->title = $request->title;
             $cast->role = $request->role;
             $cast->save();
@@ -360,10 +369,9 @@ class SourceController extends Controller
     }
 
     public function deleteCast($id)
-    {
-        {
+    { {
             $cast = Cast::find($id);
-          
+
             if ($cast) {
                 $cast->delete();
                 return response()->json([
@@ -379,7 +387,7 @@ class SourceController extends Controller
         }
     }
 
-     // Subtitle Table Fetch
+    // Subtitle Table Fetch
     public function SubtitleList(Request $request)
     {
 
@@ -417,13 +425,13 @@ class SourceController extends Controller
         }
         $data = array();
         foreach ($result as $item) {
-          
 
-            $download = '<a href="../upload/'. $item->subtitle .'" download data-title="'. $item->title .'" class="me-3 btn btn-primary px-3 text-white edit" rel=' . $item->id . ' >' . __('<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-download"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>') . '</a>';
+
+            $download = '<a href="../upload/' . $item->subtitle . '" download data-title="' . $item->title . '" class="me-3 btn btn-primary px-3 text-white edit" rel=' . $item->id . ' >' . __('<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-download"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>') . '</a>';
 
             $delete = '<a href="#" class="mr-2 btn btn-danger px-4 text-white delete" rel=' . $item->id . ' >' . __("Delete") . '</a>';
 
-            $action =  '<div class="action" style="text-align: right;"> ' . $download . $delete .' </div>'; 
+            $action =  '<div class="action" style="text-align: right;"> ' . $download . $delete . ' </div>';
 
 
             $data[] = array(
@@ -475,10 +483,9 @@ class SourceController extends Controller
     }
 
     public function deleteSubtitle($id)
-    {
-        {
+    { {
             $subtitle = Subtitle::find($id);
-          
+
             if ($subtitle) {
                 $path = 'upload/' . $subtitle->subtitle;
                 if (File::exists($path)) {

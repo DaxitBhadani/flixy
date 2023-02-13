@@ -2,6 +2,7 @@ $(document).ready(function () {
 
     var seriesId = $(".series_id").val();
     var episode_id = $(".episode_id").val();
+    
 
     $("#episodeSourceTable").dataTable({
         processing: true,
