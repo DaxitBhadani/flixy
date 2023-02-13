@@ -96,7 +96,6 @@ class SourceController extends Controller
                     'data' => $data,
                     'actors' => $actors,
                     'languages' => $languages,
-
                 ]
             );
         } else {

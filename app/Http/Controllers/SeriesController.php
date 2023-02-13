@@ -12,70 +12,7 @@ use Illuminate\Support\Facades\Validator;
 
 class SeriesController extends Controller
 {
-
-    public function fetchEpisodeList(Request $request)
-    {
-
-        // $totalData =  Episode::where('season_id', $request->season_id)->count();
-        // $rows = Episode::where('season_id', $request->season_id)->orderBy('id', 'DESC')->get();
-        $totalData =  Episode::count();
-        $rows = Episode::orderBy('id', 'DESC')->get();
-
-        $result = $rows;
-
-        $columns = array(
-            0 => 'id',
-            1 => 'image',
-            1 => 'name'
-        );
-
-        $limit = $request->input('length');
-        $start = $request->input('start');
-        $order = $columns[$request->input('order.0.column')];
-        $dir = $request->input('order.0.dir');
-
-        $totalFiltered = $totalData;
-        if (empty($request->input('search.value'))) {
-            $result = Episode::offset($start)
-                ->limit($limit)
-                ->orderBy($order, $dir)
-                ->get();
-        } else {
-            $search = $request->input('search.value');
-            $result =  Episode::Where('name', 'LIKE', "%{$search}%")
-                ->offset($start)
-                ->limit($limit)
-                ->orderBy($order, $dir)
-                ->get();
-            $totalFiltered = Episode::Where('name', 'LIKE', "%{$search}%")
-                ->count();
-        }
-        $data = array();
-        foreach ($result as $item) {
-
-            $image = '<img src="../../upload/'. $item->image .'" width="100px" height="60px">';
-            $edit = '<a href="#" data-title="' . $item->title . '" data-quality="' . $item->quality . '" data-size="' . $item->size . '" data-download="' . $item->download_type . '" data-sourcetype="' . $item->source_type . '" data-sourceurl="' . $item->source_url . '" data-accesstype="' . $item->access_type . '" class="me-3 btn btn-primary px-4 text-white edit" rel=' . $item->id . ' >' . __("Edit") . '</a>';
-
-            $delete = '<a href="" class="mr-2 btn btn-danger px-4 text-white delete" rel=' . $item->id . ' >' . __("Delete") . '</a>';
-
-            $action =  '<div class="action" style="text-align: right;"> ' . $edit . $delete . ' </div>';
-
-            $data[] = array(
-                $image,
-                $item->title,
-                $item->desc,
-                $action,
-            );
-        }
-        $json_data = array(
-            "draw"            => intval($request->input('draw')),
-            "recordsTotal"    => intval($totalData),
-            "recordsFiltered" => $totalFiltered,
-            "data"            => $data
-        );
-        echo json_encode($json_data);
-        exit();
-    }
+    
     public function seriesList($id)
     {
         $content = Content::find($id)->all()->first();
@@ -163,13 +100,16 @@ class SeriesController extends Controller
     }
 
     public function deleteSeason($id)
-    { {
-            $season = Season::find($id);
+    {
+        {
+            $season = Season::where('id', $id);
+
             if ($season) {
+                Episode::where('season_id', $id)->delete();
                 $season->delete();
                 return response()->json([
                     'status' => 200,
-                    'message' => 'Season Delete Successfully',
+                    'message' => 'Season and Episode Delete Successfully',
                 ]);
             } else {
                 return response()->json([
@@ -178,47 +118,5 @@ class SeriesController extends Controller
                 ]);
             }
         }
-    }
-
-    public function addEpisode(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            // 'season_id' => 'required',
-            'title' => 'required',
-            'duration' => 'required',
-            'access_type' => 'required',
-            'desc' => 'required',
-            'image' => 'required',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => 400,
-                'errors' => $validator->messages(),
-            ]);
-        }
-
-        $episode = new Episode;
-        $episode->season_id = $request->season_id;
-        $episode->title = $request->title;
-        $episode->duration = $request->duration;
-        $episode->access_type = $request->access_type;
-        $episode->access_type = $request->access_type;
-        $episode->desc = $request->desc;
-
-        if ($request->hasFile('image')) {
-            $file = $request->file('image');
-            $extenstion = $file->getClientOriginalExtension();
-            $filename = time() . '.' . $extenstion;
-            $file->move('upload/', $filename);
-            $episode->image = $filename;
-        }
-
-        $episode->save();
-
-        return response()->json([
-            'status' => 200,
-            'message' => 'Episode Added Successfully',
-        ]);
-    }
+    } 
 }

@@ -1,6 +1,28 @@
 $(document).ready(function () {
+    // var seriesId = $(".series_id").val();
 
-    var seriesId = $(".series_id").val();
+    $("#seasonTable").dataTable({
+        processing: true,
+        serverSide: true,
+        serverMethod: "post",
+        aaSorting: [
+            [0, "desc"]
+        ],
+        columnDefs: [{
+            targets: [0, 1],
+            orderable: false,
+        },],
+        ajax: {
+            url: `${domainURL}fetchEpisodeList`,
+            data: function (data) {
+                data.id = $('#season_list').val();
+            },
+            error: (error) => {
+                console.log(error);
+            },
+        },
+    });
+
 
     $("#season_list").change(function () {
 
@@ -10,11 +32,13 @@ $(document).ready(function () {
 
         $("#edit_season").attr('rel', id);
         $("#delete_season").attr('rel', id);
-        $("#edit_season").attr('data-title', season_title);
+        $("#edit_season").attr('data-title', season_title.trim());
         $("#edit_season").attr('data-trailer', season_trailer);
 
         $(".season_id").attr('value', id);
 
+        $(".season_number").text(season_title);
+        $("#seasonTable").DataTable().ajax.reload(null, false);
 
     }).trigger('change');
 
@@ -38,6 +62,7 @@ $(document).ready(function () {
                         title: "Season Added Succesfully!",
                         icon: "success",
                     });
+                    location.reload();
                 }
             },
         });
@@ -55,7 +80,6 @@ $(document).ready(function () {
 
         $("#editSeasonModal").modal("show");
     });
-
 
     $(document).on('submit', '#editSeasonForm', function (e) {
         e.preventDefault();
@@ -83,7 +107,7 @@ $(document).ready(function () {
                     });
                     $("#season_list").val(id).selectric('refresh');
                     $('#editSeasonModal').modal('hide');
-
+                    location.reload();
                 }
             }
         });
@@ -112,38 +136,19 @@ $(document).ready(function () {
                                 if (response.status == 404) {
                                     console.log(response.message);
                                 } else if (response.status == 200) {
+
                                     swal(
                                         `Season Delete Successfully`, {
                                         icon: "success",
                                     });
                                     console.log(response.message);
+                                    location.reload();
                                 }
                             }
                         });
                     }
                 }
             });
-    });
-
-
-    $("#seasonTable").dataTable({
-        processing: true,
-        serverSide: true,
-        serverMethod: "post",
-        aaSorting: [
-            [0, "desc"]
-        ],
-        columnDefs: [{
-            targets: [0, 1],
-            orderable: false,
-        },],
-        ajax: {
-            url: `${domainURL}fetchEpisodeList`,
-            data: function (data) { },
-            error: (error) => {
-                console.log(error);
-            },
-        },
     });
 
     // Add Episode 
@@ -173,5 +178,100 @@ $(document).ready(function () {
         });
     });
 
+    $('#seasonTable').on("click", ".edit", function (e) {
 
+        var id = $(this).attr("rel");
+        var title = $(this).data("title");
+        var duration = $(this).data("duration");
+        var accesstype = $(this).data("accesstype");
+        var desc = $(this).data("desc");
+        var image = $(this).data("image");
+
+        console.log(id);
+        $(".editSeason_id").attr('value', id);
+        $("#editEpisodeTitle").val(title);
+        $("#editDuration").val(duration);
+        $("#editAccess_type").val(accesstype).selectric('refresh');
+        $("#editDesc").val(desc);
+        $("#editEpisodeThumb").attr('src', `../../upload/${image}`);
+
+        $("#editEpisodeModal").modal("show");
+    });
+
+    $(document).on('submit', '#editEpisodeForm', function (e) {
+        e.preventDefault();
+
+        var id = $('.editSeason_id').val();
+        console.log(id);
+
+        let EditformData = new FormData($('#editEpisodeForm')[0]);
+        $.ajax({
+            type: "POST",
+            url: `${domainURL}updateEpisode/` + id,
+            data: EditformData,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+                if (response.status == 400) {
+                    console.log("400");
+                    console.log(response.errors);
+                } else if (response.status == 404) {
+                    alert(response.message);
+                } else if (response.status == 200) {
+                    swal({
+                        title: "Episode Updated Succesfully!",
+                        icon: "success",
+                    });
+                    $('#editEpisodeModal').modal('hide');
+                    $("#seasonTable").DataTable().ajax.reload(null, false);
+
+                }
+            }
+        });
+    });
+
+
+    $("#seasonTable").on('click', '.delete', function (e) {
+        e.preventDefault();
+
+        var id = $(this).attr('rel');
+        console.log(id);
+        swal({
+            title: "Are you sure You want to delete!",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+            .then((deleteValue) => {
+                if (deleteValue) {
+                    if (deleteValue == true) {
+                        $.ajax({
+                            type: "POST",
+                            url: `${domainURL}deleteEpisode/` + id,
+                            dataType: "json",
+                            success: function (response) {
+                                if (response.status == 404) {
+                                    console.log(response.message);
+                                } else if (response.status == 200) {
+                                    swal(
+                                        `Episode Delete Successfully`, {
+                                        icon: "success",
+                                    });
+                                    console.log(response.message);
+                                    $("#seasonTable").DataTable().ajax.reload(null, false);
+                                }
+                            }
+                        });
+                    }
+                }
+            });
+    });
+
+
+    
+    $('#season_list').each(function () {
+        if ($('option', this).length > 1) {
+            $("body").addClass("season_added");
+        }
+    });
 });

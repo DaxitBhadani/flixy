@@ -71,7 +71,7 @@ class ContentController extends Controller
                 ->count();
         }
 
-        $currentURL = "http://localhost/flixy/public/contentList/";
+       
 
         $data = array();
         foreach ($result as $item) {
@@ -92,7 +92,7 @@ class ContentController extends Controller
                 $featured = '<label class="switch"><input type="checkbox" name="featured" rel="' . $item->id . '" value="' . $item->featured . '" id="featured" class="featured"><span class="slider"></span> </label>';
             }
 
-            $movieDetail = '<a href="'.$currentURL .''.$item->id .'" class="btn btn-secondary me-2 " style="white-space: nowrap;">Movie Detail</a>';
+            $movieDetail = '<a href="contentList/'.$item->id .'" class="btn btn-secondary me-2 " style="white-space: nowrap;">Movie Detail</a>';
 
             $action = '<div class="action"> '.  $movieDetail . $edit . $delete .' </div>'; 
 
@@ -323,7 +323,6 @@ class ContentController extends Controller
                 ->count();
         }
 
-        $currentURL = "http://localhost/flixy/public/contentList/";
 
 
      
@@ -345,7 +344,7 @@ class ContentController extends Controller
                 $featured = '<label class="switch"><input type="checkbox" name="featured" rel="' . $item->id . '" value="' . $item->featured . '" id="featured" class="featured"><span class="slider"></span> </label>';
             }
 
-            $movieDetail = '<a href="'.$currentURL . 'series/'.$item->id .'" class="btn btn-secondary me-2 seriesDetail" style="white-space: nowrap;">Series Detail</a>';
+            $movieDetail = '<a href="contentList/series/'.$item->id .'" class="btn btn-secondary me-2 seriesDetail" style="white-space: nowrap;">Series Detail</a>';
 
             $action = '<div class="action"> '. $movieDetail . $edit . $delete .' </div>';
 

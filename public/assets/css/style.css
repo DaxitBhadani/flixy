@@ -465,3 +465,27 @@ body.theme-dark .stats-icon i {
     overflow: hidden;
     position: relative;
 }
+.episode_section {
+    display: none;
+}
+#season_action {
+    display: none;
+}
+
+body.season_added .episode_section {
+    display: block;
+}
+body.season_added #season_action {
+    display: flex;
+}
+.season-select .selectric {
+    border-radius: 0 !important;
+}
+.season-select .selectric .label {
+    height: 41px;
+    line-height: 41px;
+}
+.season-select .selectric-items li.disabled {
+    padding: 2px 10px;
+    background: #000 !important;
+}

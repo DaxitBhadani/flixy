@@ -3,6 +3,7 @@
 use App\Http\Controllers\ActorController;
 use App\Http\Controllers\CastController;
 use App\Http\Controllers\ContentController;
+use App\Http\Controllers\EpisodeController;
 use App\Http\Controllers\GenreController;
 use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\MainController;
@@ -93,5 +94,9 @@ Route::post('addSeason', [SeriesController::class, 'addSeason']);
 Route::post('updateSeason/{id}', [SeriesController::class, 'updateSeason']);
 Route::post('deleteSeason/{id}', [SeriesController::class, 'deleteSeason']);
 
-Route::post('addEpisode', [SeriesController::class, 'addEpisode']);
-Route::post('fetchEpisodeList', [SeriesController::class, 'fetchEpisodeList']);
+Route::post('addEpisode', [EpisodeController::class, 'addEpisode']);
+Route::post('fetchEpisodeList', [EpisodeController::class, 'fetchEpisodeList']);
+Route::post('updateEpisode/{id}', [EpisodeController::class, 'updateEpisode']);
+Route::post('deleteEpisode/{id}', [EpisodeController::class, 'deleteEpisode']);
+
+Route::get('contentList/series/source/{id}', [EpisodeController::class, 'episodeSource']);

@@ -1,9 +1,7 @@
 @extends('layouts.app')
-
-
-
 @section('content')
     <input type="hidden" name="movie_id" class="movie_id" id="movie_id1" value="{{ $data->id }}">
+
     <div class="page-content">
         <section class="detail_list">
             <div class="card">
@@ -29,22 +27,20 @@
             <div class="card">
 
                 <div class="card-body">
-
                     <div class="tab-content">
                         <div class="tab-pane active" id="addSeason" aria-labelledby="addSeasonTab" role="tabpanel">
                             <div class="card">
                                 <div class="card-header card-header-border px-0 pt-0 pb-3">
 
                                     <div class="">
-                                        <h4 class="fw-normal">Season List</h4>
+                                        <h4 class="fw-normal">Season List </h4>
                                         <div class="d-flex align-items-end" style="width: 400px;">
-                                            <div class="form-group w-100 m-0 me-2">
-                                                {{-- <label for="type" class="form-label">Series Season List</label> --}}
+                                            <div class="form-group w-100 m-0 me-2 season-select">
                                                 <select name="season_list" id="season_list" class="form-control"
                                                     required="">
+                                                    <option value="0" disabled > Season List</option>
                                                     @foreach ($seasons as $season)
-                                                        <option value="{{ $season->id }}"
-                                                            data-trailer_id="{{ $season->trailer_id }}">
+                                                        <option value="{{ $season->id }}" data-title="{{ $season->title }}" data-trailer_id="{{ $season->trailer_id }}">
                                                             {{ $season->title }}
                                                         </option>
                                                     @endforeach
@@ -52,12 +48,11 @@
                                             </div>
                                             <div id="season_action" class="w-auto">
                                                 <div class="text-end d-flex">
-                                                    <div class="edit btn btn-primary px-3 me-2" id="edit_season"
-                                                        rel="{{ $season->id }}">
+                                                    <div class="edit btn btn-primary px-3 me-2" id="edit_season" rel="" >
                                                         <i data-feather="edit"></i>
                                                     </div>
                                                     <div class="delete btn btn-danger px-3" id="delete_season"
-                                                        rel="{{ $season->id }}">
+                                                        rel="">
                                                         <i data-feather="trash-2"></i>
                                                     </div>
                                                 </div>
@@ -69,33 +64,13 @@
                                         Add Season
                                     </button>
                                 </div>
-                                <div class="container-fluid">
+                                <div class="episode_section">
                                     <div class="row align-items-end justify-content-between">
                                         <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 my-3">
-                                            {{-- <div class="d-flex align-items-end">
-                                                <div class="form-group w-100 m-0 me-2">
-                                                    <label for="type" class="form-label">Series Season List</label>
-                                                    <select name="season_list" id="season_list" class="form-control"
-                                                        required="">
-                                                        @foreach ($seasons as $season)
-                                                            <option value="{{ $season->id }}"
-                                                                data-trailer_id="{{ $season->trailer_id }}">
-                                                                {{ $season->title }}
-                                                            </option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                                <div id="season_action" class="w-auto">
-                                                    <div class="text-end d-flex">
-                                                        <div class="edit btn btn-primary px-3 me-2" id="edit_season" rel="{{ $season->id }}">
-                                                            <i data-feather="edit"></i>
-                                                        </div>
-                                                        <div class="delete btn btn-danger px-3" id="delete_season" rel="{{ $season->id }}">
-                                                            <i data-feather="trash-2"></i>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div> --}}
+                                            <p class=" btn border btn-secondary text-light px-4 m-0">
+                                                <i data-feather="hard-drive"></i>
+                                                <span class="season_number ms-2"></span>
+                                            </p>
                                         </div>
                                         <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 my-3">
                                             <div class="text-end">
@@ -108,20 +83,20 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="card-body px-0">
-                                    <table class="table" id="seasonTable">
-                                        <thead>
-                                            <tr>
-                                                <th width="140px"> Episode Thumb </th>
-                                                <th> Title </th>
-                                                <th> Description </th>
-                                                <th width="250px" style="text-align: right">Action</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                        </tbody>
-                                    </table>
+                                    <div class="card-body px-0">
+                                        <table class="table" id="seasonTable">
+                                            <thead>
+                                                <tr>
+                                                    <th width="140px"> Episode Thumb </th>
+                                                    <th> Title </th>
+                                                    <th> Description </th>
+                                                    <th width="250px" style="text-align: right">Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -142,8 +117,7 @@
                 </div>
                 <form class="add_new_series" id="addSeasonForm" method="POST">
                     <div class="modal-body">
-                        <input type="hidden" name="series_id" class="series_id" id="series_id"
-                            value="{{ $data->id }}">
+                        <input type="hidden" name="series_id" class="series_id" id="series_id" value="{{ $data->id }}">
                         <div class="mb-3">
                             <label for="exampleInputEmail1" class="form-label">Season Title</label>
                             <input type="text" name="title" class="form-control" id="exampleInputEmail1" required>
@@ -174,8 +148,7 @@
                 </div>
                 <form class="add_new_series" id="editSeasonForm" method="POST">
                     <div class="modal-body">
-                        <input type="hidden" name="series_id" class="series_id" id="series_id"
-                            value="{{ $data->id }}">
+                        <input type="hidden" name="series_id" class="series_id" id="series_id" value="">
                         <input type="hidden" name="season_id" class="season_id" id="season_id" value="">
                         <div class="mb-3">
                             <label for="exampleInputEmail1" class="form-label">Season Title</label>
@@ -230,12 +203,63 @@
                         </div>
                         <div class="mb-3">
                             <div class="form-group">
-                                <label for="image" class="form-label">Horizontal Poster </label>
-                                <input type="file" accept="image/*" onchange="loadFile(event)"
-                                    name="image" id="image"
-                                    class="horizontalPoster form-control">
+                                <label for="image" class="form-label">Episode Thumb </label>
+                                <input type="file" accept="image/*" onchange="loadFile(event)" name="image"
+                                    id="image" class="form-control">
                             </div>
                             <img id="episodeThumb" class="custom_img" height="220" width="400"
+                                src="http://localhost/_flixy/public/assets/img/image.svg">
+                        </div>
+                    </div>
+                    <div class="modal-footer d-flex justify-content-between">
+                        <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn theme-bg text-light px-4">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    {{-- Edit Episode Modal --}}
+    <div class="modal fade" id="editEpisodeModal" tabindex="-1" aria-labelledby="editEpisodeModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title fw-normal m-0">edit Episode</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="editEpisodeForm" method="POST">
+                    <div class="modal-body">
+                        <input type="hidden" name="season_id" class="editSeason_id" id="editSeason_id" value="">
+                        <div class="mb-3">
+                            <label for="editEpisodeTitle" class="form-label">Episode Title</label>
+                            <input type="text" name="title" class="form-control" id="editEpisodeTitle" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editDuration" class="form-label">Duration</label>
+                            <input type="text" name="duration" class="form-control" id="editDuration" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="access_type" class="form-label">Select Access Type</label>
+                            <select name="access_type" class="form-control" id="editAccess_type" required>
+                                <option value="1">Free</option>
+                                <option value="2">Paid</option>
+                                <option value="3">Unlock With Video Ads</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editDesc" class="form-label">Description</label>
+                            <input type="text" name="desc" class="form-control" id="editDesc"
+                                aria-describedby="desc" required="">
+                        </div>
+                        <div class="mb-3">
+                            <div class="form-group">
+                                <label for="editImage" class="form-label">Episode Thumb</label>
+                                <input type="file" accept="image/*" onchange="loadFile1(event)" name="image"
+                                    id="editImage" class="horizontalPoster form-control">
+                            </div>
+                            <img id="editEpisodeThumb" class="custom_img" height="220" width="400"
                                 src="http://localhost/_flixy/public/assets/img/image.svg">
                         </div>
                     </div>
@@ -251,9 +275,16 @@
 @section('scripts')
     <script src="{{ asset('assets/js/series_detail_page.js') }}"></script>
     <script>
-         // image Preview JS
-         var loadFile = function(event) {
+        // image Preview JS
+        var loadFile = function(event) {
             var output = document.getElementById('episodeThumb');
+            output.src = URL.createObjectURL(event.target.files[0]);
+            output.onload = function() {
+                URL.revokeObjectURL(output.src)
+            }
+        };
+        var loadFile1 = function(event) {
+            var output = document.getElementById('editEpisodeThumb');
             output.src = URL.createObjectURL(event.target.files[0]);
             output.onload = function() {
                 URL.revokeObjectURL(output.src)
