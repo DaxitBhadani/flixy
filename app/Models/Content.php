@@ -15,13 +15,4 @@ class Content extends Model
           return $this->hasOne(Language::class, 'id', 'language');
      }
 
-     function genres()
-     {
-          return $this->hasOne(Genre::class, 'id', 'genres');
-     }
-
-     function genres_ids()
-     {
-          return $this->hasOne(Genre::class, 'id', 'genres',);
-     }
 }

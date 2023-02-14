@@ -382,13 +382,29 @@ class ContentController extends Controller
 
     public function searchContent(Request $request)
     {
+       $query = Content::query();
+        if ($request->has('language_id')) {
+            $query->Where('language', $request->language_id);
+        }
+
+        if ($request->has('content_type')) {
+            $query->Where('content_type', $request->content_type);
+        }
+
         
-        $content = Content::Where('title', 'LIKE', "%{$request->title}%")->orWhere('language', 'LIKE', "%{$request->language_id}%")->with('language')->get();
+
+        $contents = $query->Where('title', 'LIKE', "%{$request->title}%")->with('language')->limit(2)->get();
+        $data = [];
+        foreach ($contents as $content) {
+           $ids = explode(',' , $content->genres);
+           $content->genres_ids = Genre::whereIn('id', $ids)->get();
+           array_push($data, $content);
+        }
 
         return response()->json([
             'status' => true,
             'message' => 'Search Content',
-            'data' =>  $content,
+            'data' =>  $data,
         ]);
 
     }
