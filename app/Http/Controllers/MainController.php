@@ -8,6 +8,7 @@ use App\Models\Genre;
 use App\Models\Language;
 use App\Models\TvCategory;
 use App\Models\TvChannel;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class MainController extends Controller
@@ -21,6 +22,7 @@ class MainController extends Controller
         $genre = Genre::count();
         $language = Language::count();
         $actor = Actor::count();
+        $user = User::count();
         return view(
             'index',
             [
@@ -31,6 +33,7 @@ class MainController extends Controller
                 'genre' => $genre,
                 'language' => $language,
                 'actor' => $actor,
+                'user' => $user,
             ]
         );
     }

@@ -1,8 +1,11 @@
 <?php
 
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ContentController;
 use App\Http\Controllers\EpisodeController;
 use App\Http\Controllers\FavouriteMusicController;
+use App\Http\Controllers\GenreController;
+use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\MusicController;
 use App\Http\Controllers\SourceController;
 use App\Http\Controllers\TvChannelController;
@@ -30,3 +33,19 @@ Route::post('downloadCount', [SourceController::class, 'downloadCount']);
 
 Route::post('episodeViewCount', [EpisodeController::class, 'episodeViewCount']);
 Route::post('episodeDownloadCount', [EpisodeController::class, 'episodeDownloadCount']);
+
+// Add User
+Route::post('addUser', [UserController::class, 'addUser']);
+
+// Search Content
+Route::post('searchContent', [ContentController::class, 'searchContent']);
+
+// Fetch Content
+Route::post('fetchContent', [ContentController::class, 'fetchContent']);
+Route::post('fetchAllContent', [ContentController::class, 'fetchAllContent']);
+
+// Fetch ContentByGenre
+// Route::post('contentByGenre', [ContentController::class, 'contentByGenre']);
+
+// Fetch Content By Language
+// Route::post('contentByLanguage', [LanguageController::class, 'contentByLanguage']);

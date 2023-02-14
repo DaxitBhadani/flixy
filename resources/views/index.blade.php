@@ -154,7 +154,7 @@
                                 <div class="card-left">
                                     <div class="card-top">
                                         <h4 class="font-semibold">Users</h4>
-                                        <h5 class="font-semibold">10</h5>
+                                        <h5 class="font-semibold">{{ $user }}</h5>
                                     </div>
                                     <div class="card-bottom">
                                         <a href="{{ url('user') }}" class="btn theme-bg text-white border-0 px-3 mt-2">View More</a>

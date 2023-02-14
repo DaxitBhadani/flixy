@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Content;
 use App\Models\Genre;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -11,13 +12,14 @@ class GenreController extends Controller
     public function genre()
     {
         $genreCount = Genre::count();
-      
-        return view('genre',
-        [
-            'genreCount' => $genreCount,
-          
-        ]
-    );
+
+        return view(
+            'genre',
+            [
+                'genreCount' => $genreCount,
+
+            ]
+        );
     }
 
     public function fetchGenreList(Request $request)
@@ -132,21 +134,21 @@ class GenreController extends Controller
 
     public function deleteGenre($id)
     {
-        {
-            $genre = Genre::find($id);
-            if ($genre) {
-                $genre->delete();
-                return response()->json([
-                    'status' => 200,
-                    'message' => 'Genre Delete Successfully',
-                ]);
-            } else {
-                return response()->json([
-                    'status' => 404,
-                    'message' => 'Genre Not Found',
-                ]);
-            }
+        $genre = Genre::find($id);
+        if ($genre) {
+            $genre->delete();
+            return response()->json([
+                'status' => 200,
+                'message' => 'Genre Delete Successfully',
+            ]);
+        } else {
+            return response()->json([
+                'status' => 404,
+                'message' => 'Genre Not Found',
+            ]);
         }
     }
 
+
+   
 }

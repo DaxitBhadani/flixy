@@ -52,12 +52,12 @@ class EpisodeController extends Controller
                 ->get();
         } else {
             $search = $request->input('search.value');
-            $result =  Episode::where('season_id', $id)->Where('name', 'LIKE', "%{$search}%")
+            $result =  Episode::where('season_id', $id)->Where('title', 'LIKE', "%{$search}%")->orWhere('desc', 'LIKE', "%{$search}%")
                 ->offset($start)
                 ->limit($limit)
                 ->orderBy($order, $dir)
                 ->get();
-            $totalFiltered = Episode::where('season_id', $id)->Where('name', 'LIKE', "%{$search}%")
+            $totalFiltered = Episode::where('season_id', $id)->Where('title', 'LIKE', "%{$search}%")->orWhere('desc', 'LIKE', "%{$search}%")
                 ->count();
         }
         
@@ -227,12 +227,12 @@ class EpisodeController extends Controller
                 ->get();
         } else {
             $search = $request->input('search.value');
-            $result =  EpisodeSource::where('episode_id', $id)->Where('name', 'LIKE', "%{$search}%")
+            $result =  EpisodeSource::where('episode_id', $id)->Where('title', 'LIKE', "%{$search}%")
                 ->offset($start)
                 ->limit($limit)
                 ->orderBy($order, $dir)
                 ->get();
-            $totalFiltered = EpisodeSource::where('episode_id', $id)->Where('name', 'LIKE', "%{$search}%")
+            $totalFiltered = EpisodeSource::where('episode_id', $id)->Where('title', 'LIKE', "%{$search}%")
                 ->count();
         }
         
@@ -246,9 +246,6 @@ class EpisodeController extends Controller
             } else {
                 $source_url = $item->source_url;
             }
-
-           
-
 
             $edit = '<a href="javascript:;" data-title="' . $item->title . '" data-quality="' . $item->quality . '" data-size="' . $item->size . '" data-downloadtype="' . $item->download_type . '"  data-sourcetype="' . $item->source_type . '" data-sourceurl="' . $item->source_url . '" data-accesstype="' . $item->access_type . '" class="me-3 btn btn-primary px-4 text-white edit" rel=' . $item->id . ' >' . __("Edit") . '</a>';
 
@@ -437,12 +434,18 @@ class EpisodeController extends Controller
                 ->get();
         } else {
             $search = $request->input('search.value');
-            $result =  EpisodeSubtitle::where('episode_id', $id)->Where('name', 'LIKE', "%{$search}%")
+            $result =  EpisodeSubtitle::whereHas('languages', function ($query) use ($search){
+                $query->Where('languageName', 'LIKE', "%{$search}%");
+            })
+                ->where('episode_id', $id)
                 ->offset($start)
                 ->limit($limit)
                 ->orderBy($order, $dir)
                 ->get();
-            $totalFiltered = EpisodeSubtitle::where('episode_id', $id)->Where('name', 'LIKE', "%{$search}%")
+            $totalFiltered = EpisodeSubtitle::whereHas('languages', function ($query) use ($search){
+                $query->Where('languageName', 'LIKE', "%{$search}%");
+            })
+                ->where('episode_id', $id)
                 ->count();
         }
         $data = array();

@@ -63,26 +63,26 @@ class ContentController extends Controller
                 ->get();
         } else {
             $search = $request->input('search.value');
-            $result =  Content::whereHas('language', function ($query) use ($search){
-                $query->where('title', 'like', '%'.$search.'%')
-                ->orwhere('languageName',  'LIKE', "%{$search}%")
-                ->orwhere('year',  'LIKE', "%{$search}%");
+            $result =  Content::whereHas('language', function ($query) use ($search) {
+                $query->where('title', 'like', '%' . $search . '%')
+                    ->orwhere('languageName',  'LIKE', "%{$search}%")
+                    ->orwhere('year',  'LIKE', "%{$search}%");
             })
-            ->where('content_type', $content_type)
-            ->offset($start)->limit($limit)->orderBy($order, $dir)->get();
+                ->where('content_type', $content_type)
+                ->offset($start)->limit($limit)->orderBy($order, $dir)->get();
 
-            $totalFiltered = Content::whereHas('language', function ($query) use ($search){
-                $query->where('title', 'like', '%'.$search.'%')
-                ->orwhere('languageName',  'LIKE', "%{$search}%")
-                ->orwhere('year',  'LIKE', "%{$search}%");
+            $totalFiltered = Content::whereHas('language', function ($query) use ($search) {
+                $query->where('title', 'like', '%' . $search . '%')
+                    ->orwhere('languageName',  'LIKE', "%{$search}%")
+                    ->orwhere('year',  'LIKE', "%{$search}%");
             })
-            ->where('content_type', $content_type)
-            ->count();
+                ->where('content_type', $content_type)
+                ->count();
         }
 
         $data = array();
         foreach ($result as $item) {
-            
+
             $verticlePoster = '<img src="./upload/' . $item->verticle_poster . '" alt="vertical image" width="60px" height="80px" class="object-cover">';
             $image = '<img src="./upload/' . $item->horizontal_poster . '" alt="horizontal image" width="100px" height="70px" class="object-cover">';
 
@@ -98,9 +98,9 @@ class ContentController extends Controller
                 $featured = '<label class="switch"><input type="checkbox" name="featured" rel="' . $item->id . '" value="' . $item->featured . '" id="featured" class="featured"><span class="slider"></span> </label>';
             }
 
-            $movieDetail = '<a href="contentList/'.$item->id .'" class="btn btn-secondary me-2 " style="white-space: nowrap;">Movie Detail</a>';
+            $movieDetail = '<a href="contentList/' . $item->id . '" class="btn btn-secondary me-2 " style="white-space: nowrap;">Movie Detail</a>';
 
-            $action = '<div class="action"> '.  $movieDetail . $edit . $delete .' </div>'; 
+            $action = '<div class="action"> ' .  $movieDetail . $edit . $delete . ' </div>';
 
             $data[] = array(
                 $verticlePoster,
@@ -113,7 +113,7 @@ class ContentController extends Controller
                 $action,
             );
         }
-        
+
         $json_data = array(
             "draw"            => intval($request->input('draw')),
             "recordsTotal"    => intval($totalData),
@@ -126,7 +126,7 @@ class ContentController extends Controller
 
     public function storeNewContent(Request $request)
     {
-      
+
         $validator = Validator::make($request->all(), [
             'title' => 'required',
             'content_type' => 'required',
@@ -158,7 +158,7 @@ class ContentController extends Controller
         $content->language = $request->language;
         $content->genres =  implode(',', $request->genres);
         $content->trailer_id = $request->trailer_id;
-        
+
         if ($request->hasFile('verticle_poster')) {
             $file = $request->file('verticle_poster');
             $extenstion = $file->getClientOriginalExtension();
@@ -169,7 +169,7 @@ class ContentController extends Controller
         if ($request->hasFile('horizontal_poster')) {
             $file = $request->file('horizontal_poster');
             $extenstion = $file->getClientOriginalExtension();
-            $filename = 'h_' .time() . '.' . $extenstion;
+            $filename = 'h_' . time() . '.' . $extenstion;
             $file->move('upload/', $filename);
             $content->horizontal_poster = $filename;
         }
@@ -195,7 +195,7 @@ class ContentController extends Controller
 
         $content = Content::where('id', $id)->get()->first();
         if ($content) {
-           
+
             if ($request->has('title')) {
                 $content->title = $request->title;
             }
@@ -241,7 +241,7 @@ class ContentController extends Controller
                 }
                 $file = $request->file('horizontal_poster');
                 $extenstion = $file->getClientOriginalExtension();
-                $filename = 'h_' .time() . '.' . $extenstion;
+                $filename = 'h_' . time() . '.' . $extenstion;
                 $file->move('upload/', $filename);
                 $content->horizontal_poster = $filename;
             }
@@ -263,29 +263,26 @@ class ContentController extends Controller
 
     public function deleteContent($id)
     {
-        {
-            $content = Content::find($id);
-            $path = 'upload/' . $content->verticle_poster;
-            $path1 = 'upload/' . $content->horizontal_poster;
-            if (File::exists($path) || File::exists($path1) ) {
-                File::delete($path);
-                File::delete($path1);
-            }
-            if ($content) {
-                $content->delete();
-                return response()->json([
-                    'status' => 200,
-                    'message' => 'Content Deleted Successfully',
-                ]);
-            } else {
-                return response()->json([
-                    'status' => 404,
-                    'message' => 'Content Not Found',
-                ]);
-            }
+        $content = Content::find($id);
+        $path = 'upload/' . $content->verticle_poster;
+        $path1 = 'upload/' . $content->horizontal_poster;
+        if (File::exists($path) || File::exists($path1)) {
+            File::delete($path);
+            File::delete($path1);
+        }
+        if ($content) {
+            $content->delete();
+            return response()->json([
+                'status' => 200,
+                'message' => 'Content Deleted Successfully',
+            ]);
+        } else {
+            return response()->json([
+                'status' => 404,
+                'message' => 'Content Not Found',
+            ]);
         }
     }
-
 
     public function fetchContentSeries(Request $request)
     {
@@ -321,24 +318,24 @@ class ContentController extends Controller
                 ->get();
         } else {
             $search = $request->input('search.value');
-            $result =  Content::whereHas('language', function ($query) use ($search){
-                $query->where('title', 'like', '%'.$search.'%')
-                ->orwhere('languageName',  'LIKE', "%{$search}%");
+            $result =  Content::whereHas('language', function ($query) use ($search) {
+                $query->where('title', 'like', '%' . $search . '%')
+                    ->orwhere('languageName',  'LIKE', "%{$search}%");
             })
-            ->where('content_type', $content_type)
-            ->offset($start)->limit($limit)->orderBy($order, $dir)->get();
+                ->where('content_type', $content_type)
+                ->offset($start)->limit($limit)->orderBy($order, $dir)->get();
 
-            $totalFiltered = Content::whereHas('language', function ($query) use ($search){
-                $query->where('title', 'like', '%'.$search.'%')
-                ->orwhere('languageName',  'LIKE', "%{$search}%");
+            $totalFiltered = Content::whereHas('language', function ($query) use ($search) {
+                $query->where('title', 'like', '%' . $search . '%')
+                    ->orwhere('languageName',  'LIKE', "%{$search}%");
             })
-            ->where('content_type', $content_type)
-            ->count();
+                ->where('content_type', $content_type)
+                ->count();
         }
 
 
 
-     
+
         $data = array();
         foreach ($result as $item) {
 
@@ -357,9 +354,9 @@ class ContentController extends Controller
                 $featured = '<label class="switch"><input type="checkbox" name="featured" rel="' . $item->id . '" value="' . $item->featured . '" id="featured" class="featured"><span class="slider"></span> </label>';
             }
 
-            $movieDetail = '<a href="contentList/series/'.$item->id .'" class="btn btn-secondary me-2 seriesDetail" style="white-space: nowrap;">Series Detail</a>';
+            $movieDetail = '<a href="contentList/series/' . $item->id . '" class="btn btn-secondary me-2 seriesDetail" style="white-space: nowrap;">Series Detail</a>';
 
-            $action = '<div class="action"> '. $movieDetail . $edit . $delete .' </div>';
+            $action = '<div class="action"> ' . $movieDetail . $edit . $delete . ' </div>';
 
             $data[] = array(
                 $verticlePoster,
@@ -372,7 +369,7 @@ class ContentController extends Controller
                 $action,
             );
         }
-        
+
         $json_data = array(
             "draw"            => intval($request->input('draw')),
             "recordsTotal"    => intval($totalData),
@@ -381,6 +378,39 @@ class ContentController extends Controller
         );
         echo json_encode($json_data);
         exit();
+    }
+
+    public function searchContent(Request $request)
+    {
+        
+        $content = Content::Where('title', 'LIKE', "%{$request->title}%")->orWhere('language', 'LIKE', "%{$request->language_id}%")->with('language')->get();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Search Content',
+            'data' =>  $content,
+        ]);
+
+    }
+
+    public function fetchContent(Request $request)
+    {
+        if ($request->id == 1 || $request->id == 2) {
+            $contents = Content::where('content_type', $request->id)->get();
+        }
+        else if ($request->id == 0) {
+            $contents = Content::all();
+        } else {
+            return response()->json([
+                'message' => 'Record Not Found',
+            ]);
+        }
+
+        return response()->json([
+            'status' => true,
+            'message' => 'fetchContent',
+            'data' =>  $contents,
+        ]);
     }
 
 

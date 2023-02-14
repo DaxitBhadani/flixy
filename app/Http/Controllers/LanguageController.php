@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Content;
 use App\Models\Language;
 use Illuminate\Auth\Events\Validated;
 use Illuminate\Http\Request;
@@ -13,11 +14,12 @@ class LanguageController extends Controller
     public function language()
     {
         $languageCount = Language::count();
-        return view('language',
-        [
-            'languageCount' => $languageCount,
-        ]
-    );
+        return view(
+            'language',
+            [
+                'languageCount' => $languageCount,
+            ]
+        );
     }
 
     public function fetchLanguageList(Request $request)
@@ -146,4 +148,16 @@ class LanguageController extends Controller
             ]);
         }
     }
+
+
+    // public function contentByLanguage(Request $request)
+    // {
+    //     $contents = Content::where('language', $request->id)->with('language')->get();
+
+    //     return response()->json([
+    //         'status' => true,
+    //         'message' => 'fetchLanguage',
+    //         'data' =>  $contents,
+    //     ]);
+    // }
 }

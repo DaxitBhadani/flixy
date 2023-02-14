@@ -42,12 +42,12 @@ class SourceController extends Controller
                 ->get();
         } else {
             $search = $request->input('search.value');
-            $result =  Source::where('movie_id', $request->movie_id)->Where('name', 'LIKE', "%{$search}%")
+            $result =  Source::where('movie_id', $request->movie_id)->Where('title', 'LIKE', "%{$search}%")
                 ->offset($start)
                 ->limit($limit)
                 ->orderBy($order, $dir)
                 ->get();
-            $totalFiltered = Source::where('movie_id', $request->movie_id)->Where('name', 'LIKE', "%{$search}%")
+            $totalFiltered = Source::where('movie_id', $request->movie_id)->Where('title', 'LIKE', "%{$search}%")
                 ->count();
         }
         $data = array();
@@ -58,8 +58,6 @@ class SourceController extends Controller
             } else {
                 $source_url = $item->source_url;
             }
-
-         
 
             $edit = '<a href="#" data-title="' . $item->title . '" data-quality="' . $item->quality . '" data-size="' . $item->size . '" data-download="' . $item->download_type . '" data-sourcetype="' . $item->source_type . '" data-sourceurl="' . $item->source_url . '" data-accesstype="' . $item->access_type . '" class="me-3 btn btn-primary px-4 text-white edit" rel=' . $item->id . ' >' . __("Edit") . '</a>';
 
@@ -272,12 +270,18 @@ class SourceController extends Controller
                 ->get();
         } else {
             $search = $request->input('search.value');
-            $result =  Cast::where('movie_id', $request->movie_id)->Where('name', 'LIKE', "%{$search}%")
+            $result =  Cast::whereHas('actors', function ($query) use ($search){
+                $query->where('name', 'like', '%'.$search.'%')
+                ->orWhere('role', 'like', '%'.$search.'%');
+            })->where('movie_id', $request->movie_id)
                 ->offset($start)
                 ->limit($limit)
                 ->orderBy($order, $dir)
                 ->get();
-            $totalFiltered = Cast::where('movie_id', $request->movie_id)->Where('name', 'LIKE', "%{$search}%")
+            $totalFiltered = Cast::whereHas('actors', function ($query) use ($search){
+                $query->where('name', 'like', '%'.$search.'%')
+                ->orWhere('role', 'like', '%'.$search.'%');
+            })->where('movie_id', $request->movie_id)
                 ->count();
         }
         $data = array();
@@ -415,12 +419,18 @@ class SourceController extends Controller
                 ->get();
         } else {
             $search = $request->input('search.value');
-            $result =  Subtitle::where('movie_id', $request->movie_id)->Where('name', 'LIKE', "%{$search}%")
+            $result =  Subtitle::whereHas('languages', function ($query) use ($search){
+                $query->Where('languageName', 'LIKE', "%{$search}%");
+            })
+                ->where('movie_id', $request->movie_id)
                 ->offset($start)
                 ->limit($limit)
                 ->orderBy($order, $dir)
                 ->get();
-            $totalFiltered = Subtitle::where('movie_id', $request->movie_id)->Where('name', 'LIKE', "%{$search}%")
+            $totalFiltered = Subtitle::whereHas('languages', function ($query) use ($search){
+                $query->Where('languageName', 'LIKE', "%{$search}%");
+            })
+                ->where('movie_id', $request->movie_id)
                 ->count();
         }
         $data = array();
