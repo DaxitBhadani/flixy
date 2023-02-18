@@ -16,7 +16,7 @@ class EpisodeController extends Controller
     public function episodeList($id)
     {
         $episode = EpisodeSource::where('episode_id', $id)->get()->first();
-        $data = Episode::where('season_id', $id)->get()->first();
+        $data = Episode::where('id', $id)->get()->first();
         $languages = Language::get();
         return view('episodeDetail',[
             'episodes' => $episode,
@@ -66,7 +66,7 @@ class EpisodeController extends Controller
 
             $image = '<img src="../../upload/'. $item->image .'" width="100px" height="60px">';
 
-            $episodeDetail = '<a href="source/'. $item->season_id .'" class="btn btn-secondary me-3" style="white-space: nowrap;">Episode Detail</a>';
+            $episodeDetail = '<a href="source/'. $item->id .'" class="btn btn-secondary me-3" style="white-space: nowrap;">Episode Detail</a>';
 
             $edit = '<a href="javascript:;" data-title="' . $item->title . '"  data-duration="' . $item->duration . '" data-accesstype="' . $item->access_type . '" data-desc="' . $item->desc . '" data-image="' . $item->image . '"  class="me-3 btn btn-primary px-4 text-white edit" rel=' . $item->id . ' >' . __("Edit") . '</a>';
 
@@ -284,7 +284,7 @@ class EpisodeController extends Controller
     {
 
         $validator = Validator::make($request->all(), [
-            'series_id' => 'required',
+            'episode_id' => 'required',
             'title' => 'required',
             'quality' => 'required',
             'size' => 'required',
@@ -301,7 +301,7 @@ class EpisodeController extends Controller
         }
 
         $source = new EpisodeSource;
-        $source->series_id = $request->series_id;
+        $source->episode_id = $request->episode_id;
         $source->title = $request->title;
         $source->quality = $request->quality;
         $source->size = $request->size;

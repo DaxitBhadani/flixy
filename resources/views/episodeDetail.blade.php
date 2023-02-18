@@ -1,8 +1,8 @@
 @extends('layouts.app')
 @section('content')
 
-    <input type="hidden" name="series_id" class="series_id" id="series_id" value="{{ $data->id }}">
-    <input type="hidden" name="episode_id" class="episode_id" id="episode_id" value="{{ $data->season_id }}">
+    <input type="hidden" name="series_id" class="series_id" id="series_id" value="{{ $data->season_id }}">
+    <input type="hidden" name="episode_id" class="episode_id" id="episode_id" value="{{ $data->id }}">
 
     <section class="detail_list">
         <div class="card">
@@ -102,8 +102,8 @@
                 </div>
                 <form id="addEpisodeSourceForm" method="POST">
                     <div class="modal-body">
-                        <input type="hidden" name="series_id" id="seriesCurrentUrlId" class="series_id"
-                            value="{{ $data->season_id }}">
+                        <input type="hidden" name="episode_id" id="seriesCurrentUrlId" class="episode_id"
+                            value="{{ $data->id }}">
                         <div class="mb-3">
                             <label for="title" class="form-label">Source Title</label>
                             <input type="text" class="form-control" id="title" name="title" required>
@@ -265,7 +265,7 @@
                 <form id="addEpisodeSubtitleForm" method="POST">
                     <div class="modal-body">
                         <input type="hidden" name="episode_id" id="subtitleSeriesCurrentUrlId" class="episode_id"
-                        value="{{ $data->season_id }}">
+                        value="{{ $data->id }}">
                         <div class="mb-3">
                             <label for="selectLang" class="form-label">Select Language</label>
                             <select name="title" class="form-control" id="selectLangModal" aria-invalid="false">

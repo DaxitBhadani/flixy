@@ -4,9 +4,9 @@
 
     <div class="page-content">
         <section class="detail_list">
-                <div class="card-header card-header-border mt-3 mb-4">
-                    <h4 class="fw-normal m-0"> <span class="theme-bg px-3 py-2">{{ $data->title }} </span> -- Edit Series
-                        Content </h4>
+                <div class="card-header card-header-border mt-3 mb-4 d-flex align-items-center justify-content-between">
+                    <h4 class="fw-normal m-0"> <span class="theme-bg px-3 py-2">{{ $data->title }} </span> -- Edit Series Content </h4>
+                    <h2 class="fw-normal m-0"> <span class="theme-bg px-3 py-2">{{ $data->id }} </span>  </h2>
                 </div>
             <div class="card">
 

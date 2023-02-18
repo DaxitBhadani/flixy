@@ -150,14 +150,13 @@ class LanguageController extends Controller
     }
 
 
-    // public function contentByLanguage(Request $request)
-    // {
-    //     $contents = Content::where('language', $request->id)->with('language')->get();
-
-    //     return response()->json([
-    //         'status' => true,
-    //         'message' => 'fetchLanguage',
-    //         'data' =>  $contents,
-    //     ]);
-    // }
+    public function contentByLanguage(Request $request)
+    {
+        $contents = Content::where('language', $request->id)->with('language')->get();
+        return response()->json([
+            'status' => true,
+            'message' => 'Fetch Language',
+            'data' =>  $contents,
+        ]);
+    }
 }

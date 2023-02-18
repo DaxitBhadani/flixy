@@ -380,9 +380,10 @@ class ContentController extends Controller
         exit();
     }
 
+    // Apis
     public function searchContent(Request $request)
     {
-       $query = Content::query();
+        $query = Content::query();
         if ($request->has('language_id')) {
             $query->Where('language', $request->language_id);
         }
@@ -391,14 +392,13 @@ class ContentController extends Controller
             $query->Where('content_type', $request->content_type);
         }
 
-        
 
         $contents = $query->Where('title', 'LIKE', "%{$request->title}%")->with('language')->limit(2)->get();
         $data = [];
         foreach ($contents as $content) {
-           $ids = explode(',' , $content->genres);
-           $content->genres_ids = Genre::whereIn('id', $ids)->get();
-           array_push($data, $content);
+            $ids = explode(',', $content->genres);
+            $content->genres_ids = Genre::whereIn('id', $ids)->get();
+            array_push($data, $content);
         }
 
         return response()->json([
@@ -406,15 +406,13 @@ class ContentController extends Controller
             'message' => 'Search Content',
             'data' =>  $data,
         ]);
-
     }
 
-    public function fetchContent(Request $request)
+    public function fetchContentType(Request $request)
     {
         if ($request->id == 1 || $request->id == 2) {
             $contents = Content::where('content_type', $request->id)->get();
-        }
-        else if ($request->id == 0) {
+        } else if ($request->id == 0) {
             $contents = Content::all();
         } else {
             return response()->json([
@@ -429,6 +427,49 @@ class ContentController extends Controller
         ]);
     }
 
+    public function fetchFeaturedItem(Request $request)
+    {
+        $featured = Content::where('featured', $request->id)->get();
 
+        return response()->json([
+            'status' => true,
+            'message' => 'Fetch Feaured',
+            'data' => $featured,
+        ]);
+    }
 
+    // public function fetchContent(Request $request)
+    // {
+    //     $contents = Content::where('id', $request->id)->where('content_type', 1)->with('sources')->with('casts')->with('subtitles')->get();
+    //     return response()->json([
+    //         'status' => true,
+    //         'message' => 'Fetch Content',
+    //         'data' => $contents,
+    //     ]);
+    // }
+
+    public function fetchSeriesContent(Request $request)
+    {
+        $data = Content::where('id', $request->id)->first();
+
+        if ($data == null) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Content not found',
+            ]);
+        }
+
+        if ($data->content_type == 1) {
+            $data = Content::where('id', $request->id)->with('sources')->with('casts')->with('subtitles')->get();
+        } 
+        else {
+            $data = Content::where('id', $request->id)->with(['seasons', 'seasons.episodes', 'seasons.episodes.episodeSources', 'seasons.episodes.episodeSubtitles'])->get();
+        }
+        
+        return response()->json([
+            'status' => true,
+            'message' => 'Fetch Content',
+            'data' => $data,
+        ]);
+    }
 }

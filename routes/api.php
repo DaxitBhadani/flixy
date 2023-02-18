@@ -41,11 +41,15 @@ Route::post('addUser', [UserController::class, 'addUser']);
 Route::post('searchContent', [ContentController::class, 'searchContent']);
 
 // Fetch Content
+Route::post('fetchContentType', [ContentController::class, 'fetchContentType']);
 Route::post('fetchContent', [ContentController::class, 'fetchContent']);
-Route::post('fetchAllContent', [ContentController::class, 'fetchAllContent']);
+Route::post('fetchSeriesContent', [ContentController::class, 'fetchSeriesContent']);
+
+// Fetch Featured item
+Route::post('fetchFeaturedItem', [ContentController::class, 'fetchFeaturedItem']);
 
 // Fetch ContentByGenre
 // Route::post('contentByGenre', [ContentController::class, 'contentByGenre']);
 
 // Fetch Content By Language
-// Route::post('contentByLanguage', [LanguageController::class, 'contentByLanguage']);
+Route::post('contentByLanguage', [LanguageController::class, 'contentByLanguage']);

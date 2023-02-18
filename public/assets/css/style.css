@@ -541,3 +541,6 @@ body.season_added #season_action {
 input:-webkit-autofill {
     color: red !important;
 }
+p.btn.border {
+    cursor: auto !important;
+}

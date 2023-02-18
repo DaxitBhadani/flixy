@@ -18,7 +18,7 @@ $(document).ready(function () {
         ajax: {
             url: `${domainURL}fetchEpisodeSourceList/` + episode_id,
             data: function (data) {
-                data.series_id = seriesId
+                // data.id = seriesId
             },
             error: (error) => {
                 console.log(error);

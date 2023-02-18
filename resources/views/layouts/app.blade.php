@@ -48,7 +48,7 @@
                     <ul class="menu">
                         <li class="sidebar-item">
                             <a href="{{ url('/index') }}"
-                                class="sidebar-link {{ request()->is('/index') ? 'active' : '' }}">
+                                class="sidebar-link {{ request()->is('index') ? 'active' : '' }}">
                                 <i data-feather="home"></i>
                                 <span>Dashboard</span>
                             </a>

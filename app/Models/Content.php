@@ -15,4 +15,24 @@ class Content extends Model
           return $this->hasOne(Language::class, 'id', 'language');
      }
 
+     function sources()
+     {
+          return $this->hasMany(Source::class, 'movie_id', 'id');
+     }
+
+     function casts()
+     {
+          return $this->hasMany(Cast::class, 'movie_id', 'id');
+     }
+
+     function subtitles()
+     {
+          return $this->hasMany(Subtitle::class, 'movie_id', 'id');
+     }
+
+     function seasons()
+     {
+          return $this->hasMany(Season::class, 'series_id', 'id');
+     }
+
 }

@@ -137,7 +137,7 @@
                                         <h5 class="font-semibold"> {{ $actor }} </h5>
                                     </div>
                                     <div class="card-bottom">
-                                        <a href="{{ url('actor') }}" class="btn theme-bg text-white border-0 px-3 mt-2">View More</a>
+                                        <a href="{{ url('actors') }}" class="btn theme-bg text-white border-0 px-3 mt-2">View More</a>
                                     </div>
                                 </div>
                                 <div class="card-right">
