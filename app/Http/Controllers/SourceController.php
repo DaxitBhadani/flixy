@@ -66,15 +66,29 @@ class SourceController extends Controller
             $action =  '<div class="action" style="text-align: right;"> ' . $edit . $delete . ' </div>';
 
             switch ($item->source_type) {
-                case 1: $item->source_type = "Youtube Id"; break;
-                case 2: $item->source_type = "M3u8 Url"; break;
-                case 3: $item->source_type = "Mov Url"; break;
-                case 4: $item->source_type = "Mp4 Url"; break;
-                case 5: $item->source_type = "Mkv Url"; break;
-                case 6: $item->source_type = "Webm Url"; break;
-                default: $item->source_type = "File "; break;
+                case 1:
+                    $item->source_type = "Youtube Id";
+                    break;
+                case 2:
+                    $item->source_type = "M3u8 Url";
+                    break;
+                case 3:
+                    $item->source_type = "Mov Url";
+                    break;
+                case 4:
+                    $item->source_type = "Mp4 Url";
+                    break;
+                case 5:
+                    $item->source_type = "Mkv Url";
+                    break;
+                case 6:
+                    $item->source_type = "Webm Url";
+                    break;
+                default:
+                    $item->source_type = "File ";
+                    break;
             }
-            
+
             $data[] = array(
                 $item->source_type,
                 $item->title,
@@ -221,24 +235,23 @@ class SourceController extends Controller
     }
 
     public function deleteSource($id)
-    { {
-            $source = Source::find($id);
-            $path = 'upload/' . $source->source_url;
-            if (File::exists($path)) {
-                File::delete($path);
-            }
-            if ($source) {
-                $source->delete();
-                return response()->json([
-                    'status' => 200,
-                    'message' => 'Source Delete Successfully',
-                ]);
-            } else {
-                return response()->json([
-                    'status' => 404,
-                    'message' => 'Source Not Found',
-                ]);
-            }
+    {
+        $source = Source::find($id);
+        $path = 'upload/' . $source->source_url;
+        if (File::exists($path)) {
+            File::delete($path);
+        }
+        if ($source) {
+            $source->delete();
+            return response()->json([
+                'status' => 200,
+                'message' => 'Source Delete Successfully',
+            ]);
+        } else {
+            return response()->json([
+                'status' => 404,
+                'message' => 'Source Not Found',
+            ]);
         }
     }
 
@@ -270,17 +283,17 @@ class SourceController extends Controller
                 ->get();
         } else {
             $search = $request->input('search.value');
-            $result =  Cast::whereHas('actors', function ($query) use ($search){
-                $query->where('name', 'like', '%'.$search.'%')
-                ->orWhere('role', 'like', '%'.$search.'%');
+            $result =  Cast::whereHas('actors', function ($query) use ($search) {
+                $query->where('name', 'like', '%' . $search . '%')
+                    ->orWhere('role', 'like', '%' . $search . '%');
             })->where('movie_id', $request->movie_id)
                 ->offset($start)
                 ->limit($limit)
                 ->orderBy($order, $dir)
                 ->get();
-            $totalFiltered = Cast::whereHas('actors', function ($query) use ($search){
-                $query->where('name', 'like', '%'.$search.'%')
-                ->orWhere('role', 'like', '%'.$search.'%');
+            $totalFiltered = Cast::whereHas('actors', function ($query) use ($search) {
+                $query->where('name', 'like', '%' . $search . '%')
+                    ->orWhere('role', 'like', '%' . $search . '%');
             })->where('movie_id', $request->movie_id)
                 ->count();
         }
@@ -419,7 +432,7 @@ class SourceController extends Controller
                 ->get();
         } else {
             $search = $request->input('search.value');
-            $result =  Subtitle::whereHas('languages', function ($query) use ($search){
+            $result =  Subtitle::whereHas('languages', function ($query) use ($search) {
                 $query->Where('languageName', 'LIKE', "%{$search}%");
             })
                 ->where('movie_id', $request->movie_id)
@@ -427,7 +440,7 @@ class SourceController extends Controller
                 ->limit($limit)
                 ->orderBy($order, $dir)
                 ->get();
-            $totalFiltered = Subtitle::whereHas('languages', function ($query) use ($search){
+            $totalFiltered = Subtitle::whereHas('languages', function ($query) use ($search) {
                 $query->Where('languageName', 'LIKE', "%{$search}%");
             })
                 ->where('movie_id', $request->movie_id)

@@ -3,8 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Content;
+use App\Models\EpisodeSource;
+use App\Models\EpisodeSubtitle;
 use App\Models\Genre;
+use App\Models\GenreIds;
 use App\Models\Language;
+use App\Models\Source;
+use App\Models\Subtitle;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
@@ -159,6 +164,7 @@ class ContentController extends Controller
         $content->genres =  implode(',', $request->genres);
         $content->trailer_id = $request->trailer_id;
 
+
         if ($request->hasFile('verticle_poster')) {
             $file = $request->file('verticle_poster');
             $extenstion = $file->getClientOriginalExtension();
@@ -176,9 +182,17 @@ class ContentController extends Controller
 
         $content->save();
 
+        foreach ($request->genres as $genre) {
+            $genreIds = new GenreIds;
+            $genreIds->content_id = $content->id;
+            $genreIds->genre_id = $genre;
+            $genreIds->save();
+        }
+
         return response()->json([
             'status' => 200,
             'message' => 'Content Added Successfully',
+
         ]);
     }
 
@@ -249,6 +263,19 @@ class ContentController extends Controller
                 $content->featured = $request->featured;
             }
             $content->save();
+
+
+            $genreIds = GenreIds::where('content_id', $content->id)->get();
+            $genreIds->each->delete();
+
+            foreach ($request->genres as $genre) {
+                $genreIds = new GenreIds;
+                $genreIds->content_id = $content->id;
+                $genreIds->genre_id = $genre;
+                $genreIds->save();
+            }
+            
+
             return response()->json([
                 'status' => 200,
                 'message' => 'Content Updated Successfully',
@@ -264,14 +291,39 @@ class ContentController extends Controller
     public function deleteContent($id)
     {
         $content = Content::find($id);
-        $path = 'upload/' . $content->verticle_poster;
-        $path1 = 'upload/' . $content->horizontal_poster;
-        if (File::exists($path) || File::exists($path1)) {
-            File::delete($path);
-            File::delete($path1);
-        }
         if ($content) {
+
+
+
+
+            $SourceDelete = Source::where('movie_id', $id)->get();
+            $SourceDelete->each->delete();
+
+            $subtitleDelete = Subtitle::where('movie_id', $id)->get();
+            $subtitleDelete->each->delete();
+
+            $episodrSourceDel = EpisodeSource::where('episode_id', $id)->get();
+            $episodrSourceDel->each->delete();
+
+            $episodesubtitleDel = EpisodeSubtitle::where('episode_id', $id)->get();
+            $episodesubtitleDel->each->delete();
+
+
+
+
+            $path = 'upload/' . $content->verticle_poster;
+            $path1 = 'upload/' . $content->horizontal_poster;
+            if (File::exists($path) || File::exists($path1)) {
+                File::delete($path);
+                File::delete($path1);
+            }
+
             $content->delete();
+
+            $genreIds = GenreIds::where('content_id', $content->id)->get();
+            $genreIds->each->delete();
+
+
             return response()->json([
                 'status' => 200,
                 'message' => 'Content Deleted Successfully',
@@ -448,10 +500,9 @@ class ContentController extends Controller
     //     ]);
     // }
 
-    public function fetchSeriesContent(Request $request)
+    public function fetchContent(Request $request)
     {
         $data = Content::where('id', $request->id)->first();
-
         if ($data == null) {
             return response()->json([
                 'status' => false,
@@ -461,11 +512,10 @@ class ContentController extends Controller
 
         if ($data->content_type == 1) {
             $data = Content::where('id', $request->id)->with('sources')->with('casts')->with('subtitles')->get();
-        } 
-        else {
+        } else {
             $data = Content::where('id', $request->id)->with(['seasons', 'seasons.episodes', 'seasons.episodes.episodeSources', 'seasons.episodes.episodeSubtitles'])->get();
         }
-        
+
         return response()->json([
             'status' => true,
             'message' => 'Fetch Content',

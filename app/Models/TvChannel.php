@@ -12,7 +12,7 @@ class TvChannel extends Model
 
     function tvCategories()
     {
-        return $this->hasMany(TvCategory::class, 'id', 'category');
+        return $this->hasMany(TvCategory::class, 'id', 'category_ids');
     }
 
 }

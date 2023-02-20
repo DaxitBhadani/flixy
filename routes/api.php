@@ -10,6 +10,7 @@ use App\Http\Controllers\MusicController;
 use App\Http\Controllers\SourceController;
 use App\Http\Controllers\TvChannelController;
 use App\Http\Controllers\UserController;
+use App\Models\TvChannel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -43,7 +44,7 @@ Route::post('searchContent', [ContentController::class, 'searchContent']);
 // Fetch Content
 Route::post('fetchContentType', [ContentController::class, 'fetchContentType']);
 Route::post('fetchContent', [ContentController::class, 'fetchContent']);
-Route::post('fetchSeriesContent', [ContentController::class, 'fetchSeriesContent']);
+// Route::post('fetchSeriesContent', [ContentController::class, 'fetchSeriesContent']);
 
 // Fetch Featured item
 Route::post('fetchFeaturedItem', [ContentController::class, 'fetchFeaturedItem']);
@@ -53,3 +54,6 @@ Route::post('fetchFeaturedItem', [ContentController::class, 'fetchFeaturedItem']
 
 // Fetch Content By Language
 Route::post('contentByLanguage', [LanguageController::class, 'contentByLanguage']);
+
+Route::post('liveTV', [TvChannelController::class, 'liveTV']);
+

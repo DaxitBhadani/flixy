@@ -142,14 +142,14 @@
                                     </div>
                                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-4">
                                         <label for="releaseYear" class="form-label">Release Year</label>
-                                        <input type="text" name="year" class="form-control" id="releaseYear"
+                                        <input type="number" name="year" class="form-control" id="releaseYear"
                                             aria-describedby="releaseYear" required="">
                                     </div>
                                 </div>
                             </div>
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-4">
                                 <label for="rating" class="form-label">Rating</label>
-                                <input type="text" name="rating" class="form-control" id="rating"
+                                <input type="number" name="rating" class="form-control" id="rating"
                                     aria-describedby="rating" required="">
                             </div>
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-4">
@@ -246,14 +246,14 @@
                                     </div>
                                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-4">
                                         <label for="releaseYear" class="form-label">Release Year</label>
-                                        <input type="text" name="year" class="form-control" id="editReleaseYear"
+                                        <input type="number" name="year" class="form-control" id="editReleaseYear"
                                             aria-describedby="releaseYear" required="">
                                     </div>
                                 </div>
                             </div>
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-4">
                                 <label for="rating" class="form-label">Rating</label>
-                                <input type="text" name="rating" class="form-control" id="editRating"
+                                <input type="number" name="rating" class="form-control" id="editRating"
                                     aria-describedby="rating" required="">
                             </div>
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-4">

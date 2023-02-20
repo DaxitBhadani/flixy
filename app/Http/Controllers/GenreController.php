@@ -148,7 +148,4 @@ class GenreController extends Controller
             ]);
         }
     }
-
-
-   
 }

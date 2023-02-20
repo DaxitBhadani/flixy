@@ -10,6 +10,5 @@ class TvCategory extends Model
     use HasFactory;
     protected $table = 'tv_categories';
 
-    
 
 }

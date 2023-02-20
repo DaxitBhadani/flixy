@@ -509,7 +509,7 @@ class EpisodeController extends Controller
 
     public function deleteEpisodeSubtitle($id)
     {
-        {
+       
             $subtitle = EpisodeSubtitle::find($id);
           
             if ($subtitle) {
@@ -528,7 +528,7 @@ class EpisodeController extends Controller
                     'message' => 'Episode Subtitle Not Found',
                 ]);
             }
-        }
+      
     }
 
     // APIs
