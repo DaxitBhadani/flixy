@@ -8,8 +8,10 @@ use App\Http\Controllers\GenreController;
 use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\MusicController;
 use App\Http\Controllers\SourceController;
+use App\Http\Controllers\TvCategoryController;
 use App\Http\Controllers\TvChannelController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\WishlistController;
 use App\Models\TvChannel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -41,6 +43,11 @@ Route::post('addUser', [UserController::class, 'addUser']);
 // Search Content
 Route::post('searchContent', [ContentController::class, 'searchContent']);
 
+Route::post('wishlistAdd', [WishlistController::class, 'wishlistAdd']);
+Route::post('wishlistRemove', [WishlistController::class, 'wishlistRemove']);
+Route::post('fetchWishlist', [WishlistController::class, 'fetchWishlist']);
+
+
 // Fetch Content
 Route::post('fetchContentType', [ContentController::class, 'fetchContentType']);
 Route::post('fetchContent', [ContentController::class, 'fetchContent']);
@@ -50,10 +57,14 @@ Route::post('fetchContent', [ContentController::class, 'fetchContent']);
 Route::post('fetchFeaturedItem', [ContentController::class, 'fetchFeaturedItem']);
 
 // Fetch ContentByGenre
-// Route::post('contentByGenre', [ContentController::class, 'contentByGenre']);
+Route::post('contentByGenre', [ContentController::class, 'contentByGenre']);
+
 
 // Fetch Content By Language
 Route::post('contentByLanguage', [LanguageController::class, 'contentByLanguage']);
 
 Route::post('liveTV', [TvChannelController::class, 'liveTV']);
+Route::post('channelByCategory', [TvCategoryController::class, 'channelByCategory']);
+
+
 

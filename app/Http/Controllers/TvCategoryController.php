@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\TvCategory;
+use App\Models\TvCategoryIds;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
@@ -173,6 +174,16 @@ class TvCategoryController extends Controller
                 ]);
             }
         }
+    }
+
+    public function channelByCategory(Request $request)
+    {
+        $data = TvCategoryIds::where('tv_category_ids', $request->tvCategoryIds)->with('tvChannels')->get();
+        return response()->json([
+            'status' => true,
+            'message' => 'Fetch Channel By Category',
+            'data' => $data,
+        ]);
     }
 
 }

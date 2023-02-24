@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\TvCategory;
+use App\Models\TvCategoryIds;
 use App\Models\TvChannel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
@@ -61,23 +62,24 @@ class TvChannelController extends Controller
         $data = array();
         foreach ($result as $item) {
 
-            $image = '<img src="./upload/' . $item->image . '" alt="Tv Channel image" width="70px" height="70px" style="background: #343434; padding: 4px 4px;">';
+            $tvCategoryRecords = TvCategoryIds::where('tv_channel_id', $item->id)->get();
+            $title = $tvCategoryRecords->pluck("category.title");
+            $categoryId = $tvCategoryRecords->pluck("category.id");
+            
 
-           
+            $image = '<img src="./upload/' . $item->image . '" alt="Tv Channel image" width="70px" height="70px" style="background: #ffffff; padding: 4px 4px;">';
 
-            $edit = '<a data-title="' . $item->title . '" data-categoryids="' . $item->category_ids . '"  data-accesstype="' . $item->access_type . '" data-sourcetype="' . $item->source_type . '" data-image="' . $item->image . '" data-sourceurl="' . $item->source_url . '" href="" class="me-3 btn btn-primary px-4 text-white edit" rel=' . $item->id . ' >' . __("Edit") . '</a>';
+            $edit = '<a data-title="' . $item->title . '" data-categoryids="' . $categoryId . '"  data-accesstype="' . $item->access_type . '" data-sourcetype="' . $item->source_type . '" data-image="' . $item->image . '" data-sourceurl="' . $item->source_url . '" href="" class="me-3 btn btn-primary px-4 text-white edit" rel=' . $item->id . ' >' . __("Edit") . '</a>';
 
             $delete = '<a href="" class="mr-2 btn btn-danger px-4 text-white delete" rel=' . $item->id . ' >' . __("Delete") . '</a>';
 
             $action = $edit . $delete;
 
-            $explode_id = explode(',', $item->category_ids);
-            $categories = TvCategory::whereIn('id', $explode_id)->pluck('title');
-
+         
             $data[] = array(
                 $image,
                 $item->title,
-                $categories,
+                $title,
                 $action,
             );
         }
@@ -103,7 +105,7 @@ class TvChannelController extends Controller
         $validator = Validator::make($request->all(), [
             'title' => 'required',
             'access_type' => 'required',
-            'category_ids' => 'required',
+            // 'category_ids' => 'required',
             'source_type' => 'required',
             'source_url' => 'required',
             'image' => 'required',
@@ -120,7 +122,7 @@ class TvChannelController extends Controller
         $tvChannel->title = $request->title;
         $tvChannel->access_type = $request->access_type;
 
-        $tvChannel->category_ids =  implode(',', $request->category_ids);
+        // $tvChannel->category_ids =  implode(',', $request->category_ids);
 
         $tvChannel->source_type = $request->source_type;
         $tvChannel->source_url = $request->source_url;
@@ -133,6 +135,19 @@ class TvChannelController extends Controller
         }
         $tvChannel->save();
 
+        $tvCategory = TvCategoryIds::where('tv_channel_id', $tvChannel->id)->get();
+        $tvCategory->each->delete();
+
+        $tvChannel->tv_category_id =  $request->category_ids;
+
+        foreach ($request->category_ids as $category_id) {
+            $tvCategory = new TvCategoryIds;
+            $tvCategory->tv_channel_id = $tvChannel->id;
+            $tvCategory->tv_category_id = $category_id;
+            $tvCategory->save();
+        }
+
+      
         return response()->json([
             'status' => 200,
             'message' => 'Tv Channel Added Successfully',
@@ -144,7 +159,7 @@ class TvChannelController extends Controller
         $validator = Validator::make($request->all(), [
             'title' => 'required',
             'access_type' => 'required',
-            'category_ids' => 'required',
+            // 'category_ids' => 'required',
             'source_type' => 'required',
             'source_url' => 'required',
         ]);
@@ -161,10 +176,10 @@ class TvChannelController extends Controller
             
             $tvChannel->title = $request->title;
             $tvChannel->access_type = $request->access_type;
-            $tvChannel->category_ids = implode(',', $request->category_ids);
+            // $tvChannel->category_ids = implode(',', $request->category_ids);
             $tvChannel->source_type = $request->source_type;
             $tvChannel->source_url = $request->source_url;
-
+            
             if ($request->hasFile('image')) {
                 $path = 'upload/' . $tvChannel->image;
                 if (File::exists($path)) {
@@ -177,6 +192,19 @@ class TvChannelController extends Controller
                 $tvChannel->image = $filename;
             }
             $tvChannel->save();
+          
+            $tvCategory = TvCategoryIds::where('tv_channel_id', $tvChannel->id)->get();
+            $tvCategory->each->delete();
+    
+            $tvChannel->tv_category_id =  $request->category_ids;
+    
+            foreach ($request->category_ids as $category_id) {
+                $tvCategory = new TvCategoryIds;
+                $tvCategory->tv_channel_id = $tvChannel->id;
+                $tvCategory->tv_category_id = $category_id;
+                $tvCategory->save();
+            }
+    
             return response()->json([
                 'status' => 200,
                 'message' => 'TV Channel Updated Successfully',
@@ -215,10 +243,11 @@ class TvChannelController extends Controller
 
     function test()
     {
-        $musics = TvChannel::with('tvCategories')->pluck('category');
+        // $musics = TvChannel::with('tvCategories')->pluck('category');
+        $tvCategoryRecords = TvCategoryIds::where('tv_channel_id', 2)->pluck('category')->pluck('title')->get();
         return response()->json([
             'status' => 200,
-            'message' => $musics,
+            'message' => $tvCategoryRecords,
         ]);
 
         // $array = ["1", "2", "3"];

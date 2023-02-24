@@ -149,7 +149,7 @@
                             </div>
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-4">
                                 <label for="rating" class="form-label">Rating</label>
-                                <input type="number" name="rating" class="form-control" id="rating"
+                                <input type="number" step=any name="rating" class="form-control" id="rating"
                                     aria-describedby="rating" required="">
                             </div>
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-4">
@@ -161,7 +161,7 @@
                                 </select>
                             </div>
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-4">
-                                <label for="selectGenre" class="form-label">Select Genre(multiple)</label>
+                                <label for="selectGenre" class="form-label">Select Genre(multiple) - Min 2</label>
 
                                 <select name="genres[]" class="form-control select2 " multiple="multiple" required=""
                                     tabindex="-1" aria-hidden="true">
@@ -253,7 +253,7 @@
                             </div>
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-4">
                                 <label for="rating" class="form-label">Rating</label>
-                                <input type="number" name="rating" class="form-control" id="editRating"
+                                <input type="number" step=any name="rating" class="form-control" id="editRating"
                                     aria-describedby="rating" required="">
                             </div>
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-4">
@@ -265,7 +265,7 @@
                                 </select>
                             </div>
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-4">
-                                <label for="selectGenre" class="form-label">Select Genre(multiple)</label>
+                                <label for="selectGenre" class="form-label">Select Genre(multiple) - Min 2</label>
 
                                 <select name="genres[]" class="form-control select2 " multiple="multiple" required=""
                                     tabindex="-1" aria-hidden="true" id="editGenres">

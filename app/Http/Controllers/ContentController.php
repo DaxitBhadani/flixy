@@ -274,7 +274,7 @@ class ContentController extends Controller
                 $genreIds->genre_id = $genre;
                 $genreIds->save();
             }
-            
+
 
             return response()->json([
                 'status' => 200,
@@ -293,9 +293,6 @@ class ContentController extends Controller
         $content = Content::find($id);
         if ($content) {
 
-
-
-
             $SourceDelete = Source::where('movie_id', $id)->get();
             $SourceDelete->each->delete();
 
@@ -307,9 +304,6 @@ class ContentController extends Controller
 
             $episodesubtitleDel = EpisodeSubtitle::where('episode_id', $id)->get();
             $episodesubtitleDel->each->delete();
-
-
-
 
             $path = 'upload/' . $content->verticle_poster;
             $path1 = 'upload/' . $content->horizontal_poster;
@@ -432,7 +426,7 @@ class ContentController extends Controller
         exit();
     }
 
-    // Apis
+    // Api
     public function searchContent(Request $request)
     {
         $query = Content::query();
@@ -445,7 +439,7 @@ class ContentController extends Controller
         }
 
 
-        $contents = $query->Where('title', 'LIKE', "%{$request->title}%")->with('language')->limit(2)->get();
+        $contents = $query->Where('title', 'LIKE', "%{$request->title}%")->with('language')->skip(0)->take(3)->get();
         $data = [];
         foreach ($contents as $content) {
             $ids = explode(',', $content->genres);
@@ -482,7 +476,6 @@ class ContentController extends Controller
     public function fetchFeaturedItem(Request $request)
     {
         $featured = Content::where('featured', $request->id)->get();
-
         return response()->json([
             'status' => true,
             'message' => 'Fetch Feaured',
@@ -519,6 +512,17 @@ class ContentController extends Controller
         return response()->json([
             'status' => true,
             'message' => 'Fetch Content',
+            'data' => $data,
+        ]);
+    }
+
+    public function contentByGenre(Request $request)
+    {
+
+        $data = GenreIds::where('genre_id', $request->genre_id)->with('contents')->get();
+        return response()->json([
+            'status' => true,
+            'message' => 'Fetch content By Genre',
             'data' => $data,
         ]);
     }
