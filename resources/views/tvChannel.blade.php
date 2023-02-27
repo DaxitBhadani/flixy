@@ -170,7 +170,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="tvChannelImage" class="form-label w-100">TV Channel Image</label>
-                                    <input type="file" accept="image/*" onchange="loadFile(event)" name="image"
+                                    <input type="file" accept="image/*" onchange="loadFile1(event)" name="image"
                                         id="editTvChannelImageFile" class="form-control">
                                     <img src="" id="editTvChannelImage" class="custom_img mt-3" height="100"
                                         width="100" />

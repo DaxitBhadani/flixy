@@ -39,7 +39,6 @@ class UserController extends Controller
             2 => 'email',
             3 => 'total_purchase',
             4 => 'status',
-            5 => 'view Detail',
         );
 
         $limit = $request->input('length');
@@ -77,7 +76,6 @@ class UserController extends Controller
 
             $image = '<img class="img-fluid" src="'.$item->image.'" style="width: 70px; height: 70px; object-fit: cover;">';
 
-            $viewDetail = '<a href="#" class="mr-2 btn btn-success px-4 text-white viewBtn" rel=' . $item->id . ' >' . __("View Detail") . '</a>';
 
 
             $data[] = array(
@@ -86,7 +84,6 @@ class UserController extends Controller
                 $item->email,
                 $item->totle_purchase,
                 $item->status,
-                $viewDetail,
             );
         }
         $json_data = array(

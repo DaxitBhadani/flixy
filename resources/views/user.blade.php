@@ -16,7 +16,6 @@
                                 <th> Email </th>
                                 <th> Totle Purchase </th>
                                 <th> Status </th>
-                                <th width="200px">View Detail</th>
                             </tr>
                         </thead>
                         <tbody>

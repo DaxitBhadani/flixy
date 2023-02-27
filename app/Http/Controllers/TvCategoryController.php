@@ -178,12 +178,13 @@ class TvCategoryController extends Controller
 
     public function channelByCategory(Request $request)
     {
-        $data = TvCategoryIds::where('tv_category_ids', $request->tvCategoryIds)->with('tvChannels')->get();
+        $data = TvCategoryIds::where('tv_category_id', $request->tvCategoryIds)->with('tvChannels')->get();
         return response()->json([
             'status' => true,
             'message' => 'Fetch Channel By Category',
             'data' => $data,
         ]);
+
     }
 
 }

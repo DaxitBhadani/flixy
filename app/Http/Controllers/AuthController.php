@@ -25,7 +25,7 @@ class AuthController extends Controller
             $req->session()->put('username', $data['username']);
             return  redirect('index');
         } else {
-            Session::flash('message', 'Wrong credentials !');
+            Session::flash('message', 'Wrong credentials!');
             return redirect()->route('login');
         }
     }
